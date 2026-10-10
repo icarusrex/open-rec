@@ -68,7 +68,7 @@ pytest tests/test_integration_vtn.py
 - **The VEN polls** every 30 s. It doesn't use subscriptions or MQTT, and it sends no OpenADR reports back; measurement comes from Home Assistant counters instead.
 - **No E-Redes import, statements, or coefficient engine yet.** E-Redes delivers daily `sgl_v2` files over sFTP. Its EGAC document lists the record types (`00`, `01`, `04`, `20`, `99`) and fields, but not the delimiter, byte layout or service-code meanings. The parser is deliberately deferred until a real file exists, rather than guessed.
 - **Home Assistant package:** it passes `hass --script check_config` on Home Assistant 2026.2, and an injected typo is rejected, so the check is meaningful. Its runtime behaviour (boost start, stop, hysteresis, restart) has not been exercised in a running Home Assistant.
-- **CI workflow is unverified until its first run** on GitHub (it pulls `ghcr.io/openleadr/openleadr-rs:v0.2.7`, which this sandbox couldn't).
+- **CI verified:** the first run (aa690c4) pulled `ghcr.io/openleadr/openleadr-rs:v0.2.7`, started the VTN and passed lint, unit and live tests. That also confirms the image tag pinned in `docker-compose.yml` exists. The compose stack as a whole (`docker compose up`) has still not been run end to end.
 - **Licence is Apache-2.0** to match openleadr-rs. The owner may prefer AGPL-3 if he later builds on the Som Comunitats Odoo modules.
 
 ## Questions for the reviewer
