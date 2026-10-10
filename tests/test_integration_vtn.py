@@ -11,6 +11,8 @@ import dataclasses
 import datetime as dt
 import os
 import uuid
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
 
 import httpx
 import pytest
@@ -102,6 +104,8 @@ def test_publish_then_ven_follows(env):
         mock.route(host="127.0.0.1").pass_through()
         on = mock.post("http://ha:8123/api/services/input_boolean/turn_on").mock(return_value=httpx.Response(200, json=[]))
         off = mock.post("http://ha:8123/api/services/input_boolean/turn_off").mock(return_value=httpx.Response(200, json=[]))
+        mock.post('http://ha:8123/api/services/timer/start').mock(return_value=httpx.Response(200, json=[]))
+        mock.post('http://ha:8123/api/services/timer/cancel').mock(return_value=httpx.Response(200, json=[]))
         bridge = Bridge(ven, HomeAssistant("http://ha:8123", "tok"), "input_boolean.open_rec_surplus_window",
                         settings.program_name)
         assert bridge.tick(QUARTERS[43]) == 0
@@ -138,7 +142,7 @@ def test_publishing_prunes_events_older_than_a_week(env):
     bl = VtnClient(settings.vtn_url, settings.bl_client_id, settings.bl_client_secret)
     old, new = dt.date(2026, 9, 30), dt.date(2026, 10, 12)
     for day in (old, new):
-        publish_day(settings, conn, bl, day, prices_fetcher=fixture_prices,
+        publish_day(settings, conn, bl, day, now=QUARTERS[40], prices_fetcher=fixture_prices,
                     forecast_fetcher=lambda s, d=day: {q: 2.5 for q in quarter_starts(d)})
     names = [e["eventName"] for e in bl.events(bl.find_program_id(settings.program_name))]
     assert names == ["open-rec 2026-10-12 steer"]
@@ -151,3 +155,21 @@ def test_bootstrap_rerun_updates_scopes():
         conn.execute(bootstrap_sql("rerun-bl", "s1", "rerun-ven", "s2"))
         (scopes,) = conn.execute("SELECT scopes::text[] FROM \"user\" WHERE id = 'rerun-bl'").fetchone()
     assert sorted(scopes) == ["read_all", "write_events", "write_programs"]
+
+
+def test_concurrent_publishers_leave_one_event(env):
+    settings, _ = env
+    barrier = Barrier(2)
+
+    def publish():
+        with db.connect(APP_DB) as conn:
+            bl = VtnClient(settings.vtn_url, settings.bl_client_id, settings.bl_client_secret)
+            barrier.wait(timeout=10)
+            return publish_day(settings, conn, bl, DAY, now=QUARTERS[40],
+                               prices_fetcher=lambda d: {}, forecast_fetcher=fixture_forecast)
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(lambda _: publish(), range(2)))
+    assert results[0]['event_id'] == results[1]['event_id']
+    bl = VtnClient(settings.vtn_url, settings.bl_client_id, settings.bl_client_secret)
+    assert len(bl.events(bl.find_program_id(settings.program_name))) == 1

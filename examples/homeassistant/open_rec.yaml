@@ -1,30 +1,25 @@
-# open-rec Home Assistant package
-#
-# Put this file in <config>/packages/ and enable packages in configuration.yaml:
-#   homeassistant:
-#     packages: !include_dir_named packages
-#
-# Then replace the two placeholder entities below with your own:
-#   switch.water_heater              - the relay/contactor that powers the element
-#   sensor.water_heater_temperature  - tank temperature (e.g. DS18B20 on a Shelly Add-on)
-#
-# What it does: while open-rec's surplus window is on, heat the tank up to a
-# higher "boost" temperature using solar surplus. When the window ends, or the
-# tank reaches the boost limit, it switches off only what it switched on itself,
-# and your normal water-heater automation takes over again.
-#
-# Your normal thermostat automation should skip while input_boolean.open_rec_heater_boost
-# is on, so the two don't fight, and should also trigger when it turns off, so it
-# takes over again straight away. The element's own thermostat and safety cut-out
-# remain the hardware limit; this package never overrides them.
+# open-rec Home Assistant package. Replace switch.water_heater and
+# sensor.water_heater_temperature with your entities.
+# Normal thermostat automation must skip while open_rec_heater_boost is ON,
+# and reconcile again when it becomes OFF. Retain the physical thermostat/cut-out.
+# One queued controller owns all boost relay commands. It re-evaluates current
+# state on every run and retries failed OFF commands every 30 seconds.
 
 input_boolean:
   open_rec_surplus_window:
     name: open-rec surplus window
     icon: mdi:solar-power-variant
+    initial: false
   open_rec_heater_boost:
     name: open-rec heater boost active
     icon: mdi:water-boiler
+    # Restore ownership after restart so an interrupted boost is shut down.
+
+timer:
+  open_rec_bridge_lease:
+    name: open-rec bridge permission lease
+    duration: "00:02:00"
+    restore: false
 
 input_number:
   open_rec_boost_max_temp:
@@ -37,58 +32,86 @@ input_number:
     initial: 65
 
 automation:
-  - id: open_rec_boost_start
-    alias: "open-rec: heat water during surplus window"
-    mode: single
+  - id: open_rec_heater_controller
+    alias: "open-rec: reconcile water heater boost"
+    mode: queued
+    max: 20
     triggers:
       - trigger: state
-        entity_id: input_boolean.open_rec_surplus_window
-        to: "on"
+        entity_id:
+          - input_boolean.open_rec_surplus_window
+          - timer.open_rec_bridge_lease
+          - sensor.water_heater_temperature
+          - input_number.open_rec_boost_max_temp
+          - switch.water_heater
       - trigger: time_pattern
-        minutes: "/5"
-    conditions:
-      - condition: state
-        entity_id: input_boolean.open_rec_surplus_window
-        state: "on"
-      - condition: state
-        entity_id: input_boolean.open_rec_heater_boost
-        state: "off"
-      - condition: template
-        value_template: >
-          {{ states('sensor.water_heater_temperature') | float(999)
-             < states('input_number.open_rec_boost_max_temp') | float(0) - 2 }}
-    actions:
-      - action: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.open_rec_heater_boost
-      - action: switch.turn_on
-        target:
-          entity_id: switch.water_heater
-
-  - id: open_rec_boost_stop
-    alias: "open-rec: stop boost when window ends or tank is hot"
-    mode: single
-    triggers:
-      - trigger: state
-        entity_id: input_boolean.open_rec_surplus_window
-        to: "off"
-      - trigger: template
-        value_template: >
-          {{ states('sensor.water_heater_temperature') | float(999)
-             >= states('input_number.open_rec_boost_max_temp') | float(0) }}
-      - trigger: state
-        entity_id: sensor.water_heater_temperature
-        to: "unavailable"
+        seconds: "/30"
       - trigger: homeassistant
         event: start
-    conditions:
-      - condition: state
-        entity_id: input_boolean.open_rec_heater_boost
-        state: "on"
     actions:
-      - action: switch.turn_off
-        target:
-          entity_id: switch.water_heater
-      - action: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.open_rec_heater_boost
+      - choose:
+          # Stop first. Ownership remains ON until the relay confirms OFF;
+          # unavailable relays and unsuccessful service calls are retried.
+          - conditions:
+              - condition: state
+                entity_id: input_boolean.open_rec_heater_boost
+                state: "on"
+              - condition: template
+                value_template: >
+                  {{ not is_state('input_boolean.open_rec_surplus_window', 'on')
+                     or not is_state('timer.open_rec_bridge_lease', 'active')
+                     or not is_number(states('sensor.water_heater_temperature'))
+                     or states('sensor.water_heater_temperature') | float(999)
+                        >= states('input_number.open_rec_boost_max_temp') | float(0) }}
+            sequence:
+              - action: switch.turn_off
+                continue_on_error: true
+                target:
+                  entity_id: switch.water_heater
+              - wait_template: "{{ is_state('switch.water_heater', 'off') }}"
+                timeout: "00:00:10"
+                continue_on_timeout: true
+              - if:
+                  - condition: state
+                    entity_id: switch.water_heater
+                    state: "off"
+                then:
+                  - action: input_boolean.turn_off
+                    target:
+                      entity_id: input_boolean.open_rec_heater_boost
+          - conditions:
+              # A manual OFF during an owned boost must stay OFF. An unsuccessful
+              # ON command also fails closed until ownership is released.
+              - condition: state
+                entity_id: input_boolean.open_rec_heater_boost
+                state: "off"
+              - condition: state
+                entity_id: input_boolean.open_rec_surplus_window
+                state: "on"
+              - condition: state
+                entity_id: timer.open_rec_bridge_lease
+                state: "active"
+              - condition: state
+                entity_id: switch.water_heater
+                state: "off"
+              - condition: template
+                value_template: >
+                  {{ is_number(states('sensor.water_heater_temperature'))
+                     and states('sensor.water_heater_temperature') | float(999)
+                        < states('input_number.open_rec_boost_max_temp') | float(0) - 2 }}
+            sequence:
+              - action: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.open_rec_heater_boost
+              # Recheck after acquiring ownership. A queued stop cannot be
+              # overtaken by another start, and ownership survives any failure.
+              - condition: template
+                value_template: >
+                  {{ is_state('input_boolean.open_rec_surplus_window', 'on')
+                     and is_state('timer.open_rec_bridge_lease', 'active')
+                     and is_number(states('sensor.water_heater_temperature'))
+                     and states('sensor.water_heater_temperature') | float(999)
+                        < states('input_number.open_rec_boost_max_temp') | float(0) - 2 }}
+              - action: switch.turn_on
+                target:
+                  entity_id: switch.water_heater

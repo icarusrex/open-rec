@@ -40,7 +40,19 @@ def test_open_meteo_forecast_shifts_to_interval_start():
     params = route.calls[0].request.url.params
     assert params["minutely_15"] == "global_tilted_irradiance" and params["azimuth"] == "0"
     assert fc[dt.datetime(2026, 10, 12, 12, 0, tzinfo=UTC)] == pytest.approx(0.8 * 2.7 * 0.85)
-    assert fc[dt.datetime(2026, 10, 12, 12, 15, tzinfo=UTC)] == 0.0
+    assert dt.datetime(2026, 10, 12, 12, 15, tzinfo=UTC) not in fc
+    assert params['past_days'] == '1'
+
+
+@respx.mock
+def test_home_assistant_timer_lease_has_a_bounded_expiry():
+    start = respx.post('http://ha:8123/api/services/timer/start').mock(return_value=httpx.Response(200, json=[]))
+    cancel = respx.post('http://ha:8123/api/services/timer/cancel').mock(return_value=httpx.Response(200, json=[]))
+    ha = HomeAssistant('http://ha:8123', 'tok')
+    ha.set_lease('timer.open_rec_bridge_lease', True)
+    ha.set_lease('timer.open_rec_bridge_lease', False)
+    assert b'00:02:00' in start.calls[0].request.content
+    assert cancel.called
 
 
 @respx.mock
@@ -84,3 +96,44 @@ def test_vtn_client_pages_through_lists_and_prunes_old_days():
     assert len(vtn.events("p1")) == 60  # two pages
     assert vtn.prune_events("p1", "2026-10-05") == 34  # Sept 1-30 and Oct 1-4
     assert deletes.call_count == 34
+
+
+def test_vtn_only_mutates_exact_owned_event_names():
+    from openrec.vtn import VtnClient
+
+    vtn = object.__new__(VtnClient)
+    events = [{'id': 'manual', 'eventName': 'open-rec 2026-10-12 manual override'},
+              {'id': 'maintenance', 'eventName': 'open-rec 1 maintenance'},
+              {'id': 'invalid', 'eventName': 'open-rec 2026-02-30 steer'}]
+    vtn.events = lambda p: events
+    calls = []
+
+    def request(method, path, **kw):
+        calls.append((method, path))
+        return httpx.Response(200, json={'id': 'new'})
+
+    vtn._request = request
+    vtn.upsert_event({'programID': 'p', 'eventName': 'open-rec 2026-10-12 steer'}, 'open-rec 2026-10-12')
+    assert calls == [('POST', '/events')]
+    calls.clear()
+    assert vtn.prune_events('p', '2026-10-13') == 0
+    assert calls == []
+
+
+def test_duplicate_cleanup_happens_only_after_successful_replace():
+    from openrec.vtn import VtnClient
+
+    vtn = object.__new__(VtnClient)
+    vtn.events = lambda p: [{'id': str(i), 'eventName': 'open-rec 2026-10-12 steer'} for i in range(2)]
+    calls = []
+
+    def request(method, path, **kw):
+        calls.append(method)
+        if method == 'PUT':
+            raise ConnectionError('failed replacement')
+        return httpx.Response(200, json={})
+
+    vtn._request = request
+    with pytest.raises(ConnectionError):
+        vtn.upsert_event({'programID': 'p'}, 'open-rec 2026-10-12')
+    assert calls == ['PUT']

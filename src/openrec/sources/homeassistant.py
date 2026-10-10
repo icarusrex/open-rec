@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 import httpx
 
 
@@ -16,7 +18,8 @@ class HomeAssistant:
         resp = self.client.get(f"{self.url}/api/states/{entity_id}", headers=self.headers)
         resp.raise_for_status()
         try:
-            return float(resp.json()["state"])
+            value = float(resp.json()["state"])
+            return value if math.isfinite(value) and value >= 0 else None
         except (KeyError, TypeError, ValueError):
             return None
 
@@ -26,5 +29,16 @@ class HomeAssistant:
         service = "turn_on" if on else "turn_off"
         resp = self.client.post(
             f"{self.url}/api/services/{domain}/{service}", headers=self.headers, json={"entity_id": entity_id}
+        )
+        resp.raise_for_status()
+
+    def set_lease(self, entity_id: str, active: bool) -> None:
+        """HA expires this permission independently if the bridge stops polling."""
+        service = "start" if active else "cancel"
+        body = {"entity_id": entity_id}
+        if active:
+            body["duration"] = "00:02:00"
+        resp = self.client.post(
+            f"{self.url}/api/services/timer/{service}", headers=self.headers, json=body
         )
         resp.raise_for_status()

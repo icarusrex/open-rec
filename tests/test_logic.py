@@ -74,7 +74,7 @@ def test_surplus_flags_negative_price_opens_window_and_missing_forecast_is_safe(
     day = dt.date(2026, 10, 12)
     q = quarter_starts(day)
     prices = {q[10]: -1.0, q[11]: 0.0}
-    flags = surplus_flags(q, {}, [0.3] * 96, prices, pv_max_kw=3, threshold_kw=1, min_window_quarters=2,
+    flags = surplus_flags(q, dict.fromkeys(q, 0.0), [0.3] * 96, prices, pv_max_kw=3, threshold_kw=1, min_window_quarters=2,
                           negative_price_windows=True)
     assert flags[10:12] == [1, 1] and sum(flags) == 2
     flags_off = surplus_flags(q, {}, [0.3] * 96, prices, pv_max_kw=3, threshold_kw=1, min_window_quarters=2,

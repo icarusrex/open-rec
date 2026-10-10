@@ -76,6 +76,8 @@ jobs:
           sed -i "s|^PG_PASSWORD=.*|PG_PASSWORD=ci|" .env
           sed -i "s|^OAUTH_BASE64_SECRET=.*|OAUTH_BASE64_SECRET=$(openssl rand -base64 32)|" .env
           sed -i "s|^OPENREC_DATABASE_URL=.*|OPENREC_DATABASE_URL=postgresql://openadr:ci@db:5432/openrec|" .env
+          # This job checks live forecasts/prices without a Home Assistant meter.
+          sed -i 's|^HA_HOUSE_ENERGY_ENTITY=.*|HA_HOUSE_ENERGY_ENTITY=|' .env
 
       - name: Start Postgres and the VTN
         run: |
@@ -104,3 +106,15 @@ jobs:
       - name: Logs on failure
         if: failure()
         run: docker compose logs
+
+  home-assistant:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install pinned HA runtime and test runner
+        run: pip install homeassistant==2026.2.0 pytest pytest-asyncio
+      - name: Heater controller runtime regressions (actuator mocked)
+        run: pytest tests/ha -v
