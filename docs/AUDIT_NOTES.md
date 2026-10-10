@@ -1,5 +1,7 @@
 # Reviewer brief: open-rec v0.1.2
 
+> **Status update:** a second-AI review of this brief led to further fixes, merged in PR #1 (bridge lease and fail-safe, single Home Assistant controller, strict forecast/baseload completeness, publication lock, exact event ownership, overlap-based metering, randomization test). All three CI jobs passed on that PR: unit + live VTN, Home Assistant 2026.2 runtime, and the compose smoke test with live data. For the current state and the **next** audit checklist, read [`review-fixes-handoff.md`](review-fixes-handoff.md); this brief describes the pre-review baseline.
+
 You are reviewing **https://github.com/icarusrex/open-rec** (branch `main`). Be adversarial: find bugs, unsafe behaviour, wrong assumptions, and anything more complex than needed. Skip style nits. For each finding give the file and line, what's wrong, why it matters (critical / major / minor), and a concrete fix. Also state which claims below you checked and found true.
 
 ## Context
