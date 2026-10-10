@@ -32,16 +32,19 @@ def floor_quarter(ts: dt.datetime) -> dt.datetime:
 def interval_energy(snapshots: Iterable[tuple[dt.datetime, float]]) -> dict[dt.datetime, float]:
     """kWh per 15-minute interval from cumulative counter snapshots.
 
-    A delta spanning several quarters is spread evenly over them. Negative
-    deltas (counter reset) are skipped.
+    A delta spanning several quarters is spread evenly over them; two snapshots
+    in the same quarter (e.g. after a restart) count toward that quarter.
+    Negative deltas (counter reset) are skipped.
     """
-    points = sorted((floor_quarter(ts), v) for ts, v in snapshots)
+    points = sorted((ts.astimezone(UTC), v) for ts, v in snapshots)
     out: dict[dt.datetime, float] = {}
     for (t0, v0), (t1, v1) in zip(points, points[1:]):
         delta = v1 - v0
-        n = int((t1 - t0) / QUARTER)
-        if n <= 0 or delta < 0:
+        if delta < 0:
             continue
+        q0 = floor_quarter(t0)
+        n = max(int((floor_quarter(t1) - q0) / QUARTER), 1)
+        t0 = q0
         for k in range(n):
             q = t0 + QUARTER * k
             out[q] = out.get(q, 0.0) + delta / n

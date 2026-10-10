@@ -79,3 +79,10 @@ def test_sign_test_p_values():
     assert sign_test_p([0.01] * 5 + [-0.01] * 5) == 1.0
     assert sign_test_p([0.01] * 15 + [-0.01] * 5) == pytest.approx(0.04139, abs=1e-4)
     assert sign_test_p([0.0, 0.0]) is None
+
+
+def test_interval_energy_keeps_energy_from_two_snapshots_in_one_quarter():
+    t = dt.datetime(2026, 10, 12, 10, 0, 20, tzinfo=UTC)
+    snaps = [(t, 10.0), (t + dt.timedelta(minutes=5), 10.1), (t + dt.timedelta(minutes=15), 10.3)]
+    e = interval_energy(snaps)
+    assert e == {dt.datetime(2026, 10, 12, 10, 0, tzinfo=UTC): pytest.approx(0.3)}

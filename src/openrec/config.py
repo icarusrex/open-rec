@@ -77,7 +77,7 @@ class Settings:
             surplus_threshold_kw=_float("SURPLUS_THRESHOLD_KW", 1.0),
             baseload_kw_default=_float("BASELOAD_KW_DEFAULT", 0.3),
             min_window_quarters=int(_env("MIN_WINDOW_QUARTERS", "2")),
-            negative_price_windows=(_env("NEGATIVE_PRICE_WINDOWS", "true") or "true").lower() == "true",
+            negative_price_windows=(_env("NEGATIVE_PRICE_WINDOWS", "false") or "false").lower() == "true",
             publish_time_local=dt.time(int(hh), int(mm)),
             ha_url=(_env("HA_URL") or "").rstrip("/") or None,
             ha_token=_env("HA_TOKEN"),

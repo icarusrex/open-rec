@@ -62,3 +62,45 @@ jobs:
       - name: VTN logs on failure
         if: failure()
         run: docker logs vtn || true
+
+  compose-smoke:
+    # Runs the real stack (docker compose: Postgres, VTN, open-rec image) and one live
+    # publish against OMIE and Open-Meteo, the two data sources the unit tests only mock.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure .env
+        run: |
+          cp .env.example .env
+          sed -i "s|^PG_PASSWORD=.*|PG_PASSWORD=ci|" .env
+          sed -i "s|^OAUTH_BASE64_SECRET=.*|OAUTH_BASE64_SECRET=$(openssl rand -base64 32)|" .env
+          sed -i "s|^OPENREC_DATABASE_URL=.*|OPENREC_DATABASE_URL=postgresql://openadr:ci@db:5432/openrec|" .env
+
+      - name: Start Postgres and the VTN
+        run: |
+          docker compose up -d db vtn
+          for i in $(seq 1 30); do
+            [ "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/programs)" = "401" ] && exit 0
+            sleep 2
+          done
+          docker compose logs; exit 1
+
+      - name: Build the open-rec image and bootstrap VTN clients
+        run: |
+          docker compose build service
+          docker compose run --rm service open-rec bootstrap --apply \
+            --vtn-database-url postgresql://openadr:ci@db:5432/openadr 2> secrets.txt
+          sed -i '/^VTN_BL_CLIENT_SECRET=$/d;/^VEN_CLIENT_SECRET=$/d' .env
+          grep -E '^(VTN_BL_CLIENT_SECRET|VEN_CLIENT_SECRET)=' secrets.txt >> .env
+
+      - name: Live publish of today's market day (OMIE + Open-Meteo)
+        run: |
+          DAY=$(TZ=Europe/Madrid date +%F)
+          docker compose run --rm service open-rec publish --day "$DAY" | tee publish.txt
+          grep -E "'prices': (92|96|100)" publish.txt
+          grep -E "'complete': True" publish.txt
+
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs

@@ -6,6 +6,8 @@ import time
 
 import httpx
 
+PAGE = 50  # openleadr-rs maximum page size
+
 
 class VtnClient:
     def __init__(self, base_url: str, client_id: str, client_secret: str, client: httpx.Client | None = None):
@@ -43,9 +45,18 @@ class VtnClient:
             )
         return resp
 
+    def _list(self, path: str, params: dict | None = None) -> list[dict]:
+        """All items of a collection. openleadr-rs returns at most 50 per request."""
+        items: list[dict] = []
+        while True:
+            page = self._request("GET", path, params={**(params or {}), "skip": len(items), "limit": PAGE}).json()
+            items.extend(page)
+            if len(page) < PAGE:
+                return items
+
     # --- programs -------------------------------------------------------------
     def programs(self) -> list[dict]:
-        return self._request("GET", "/programs").json()
+        return self._list("/programs")
 
     def ensure_program(self, name: str) -> str:
         """ID of the program with this name, creating it if needed."""
@@ -70,8 +81,20 @@ class VtnClient:
 
     # --- events ---------------------------------------------------------------
     def events(self, program_id: str | None = None) -> list[dict]:
-        params = {"programID": program_id} if program_id else None
-        return self._request("GET", "/events", params=params).json()
+        return self._list("/events", {"programID": program_id} if program_id else None)
+
+    def prune_events(self, program_id: str, keep_from: str) -> int:
+        """Delete this program's open-rec events for days before ``keep_from`` (YYYY-MM-DD).
+
+        Keeps the VTN's event list short, so VENs poll a page or two, not a year of history.
+        """
+        deleted = 0
+        for e in self.events(program_id):
+            name = e.get("eventName") or ""
+            if name.startswith("open-rec ") and name[9:19] < keep_from:
+                self._request("DELETE", f"/events/{e['id']}")
+                deleted += 1
+        return deleted
 
     def upsert_event(self, body: dict, day_prefix: str) -> dict:
         """Create the event, or replace any existing event of the same program and day.
@@ -94,7 +117,7 @@ class VtnClient:
     # --- VENs -----------------------------------------------------------------
     def ensure_ven(self, ven_name: str) -> str:
         """Register this VEN client (as the VEN itself) if it isn't yet; returns its ID."""
-        for v in self._request("GET", "/vens").json():
+        for v in self._list("/vens"):
             if v.get("venName") == ven_name:
                 return v["id"]
         body = {"objectType": "VEN_VEN_REQUEST", "venName": ven_name}

@@ -64,3 +64,23 @@ def test_bootstrap_sql_hashes_secrets_verifiably():
     stored = line.split(", '")[-1].split("')")[0]
     assert PasswordHasher().verify(stored, "bl-secret")
     assert all(s in sql for s in BL_SCOPES)
+
+
+@respx.mock
+def test_vtn_client_pages_through_lists_and_prunes_old_days():
+    from openrec.vtn import VtnClient
+
+    respx.post("http://vtn/auth/token").mock(return_value=httpx.Response(200, json={"access_token": "t", "expires_in": 3600}))
+    days = [f"2026-09-{d:02d}" for d in range(1, 31)] + [f"2026-10-{d:02d}" for d in range(1, 31)]
+    events = [{"id": f"e{i}", "eventName": f"open-rec {d} steer"} for i, d in enumerate(days)]
+
+    def page(request):
+        skip, limit = int(request.url.params["skip"]), int(request.url.params["limit"])
+        return httpx.Response(200, json=events[skip : skip + limit])
+
+    respx.get("http://vtn/events").mock(side_effect=page)
+    deletes = respx.delete(url__regex=r"http://vtn/events/e\d+").mock(return_value=httpx.Response(200, json={}))
+    vtn = VtnClient("http://vtn", "id", "secret")
+    assert len(vtn.events("p1")) == 60  # two pages
+    assert vtn.prune_events("p1", "2026-10-05") == 34  # Sept 1-30 and Oct 1-4
+    assert deletes.call_count == 34

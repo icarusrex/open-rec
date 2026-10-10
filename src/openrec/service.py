@@ -11,6 +11,7 @@ from . import db
 from .config import Settings
 from .logic import (
     LOCAL_TZ,
+    MARKET_TZ,
     UTC,
     baseload_profile,
     build_event,
@@ -25,6 +26,9 @@ from .testplan import is_steering_day
 from .vtn import VtnClient
 
 log = logging.getLogger("open-rec")
+
+EVENT_RETENTION_DAYS = 7
+RETRY_SECONDS = 900
 
 PriceFetcher = Callable[[dt.date], dict]
 ForecastFetcher = Callable[[Settings], dict]
@@ -100,7 +104,17 @@ def publish_day(
     program_id = vtn.ensure_program(settings.program_name)
     body = build_event(program_id, day, quarters, prices, flags, steering=steering)
     event = vtn.upsert_event(body, f"open-rec {day.isoformat()}")
-    db.mark_published(conn, day, event["id"], steering, sum(flags))
+    # A day without a forecast is published as a safe all-zero placeholder but not
+    # marked done, so the run loop retries; otherwise a steer day would silently
+    # behave like a control day and bias the experiment.
+    complete = len(forecast) >= 0.75 * len(quarters)
+    if complete:
+        db.mark_published(conn, day, event["id"], steering, sum(flags))
+    try:
+        keep_from = (day - dt.timedelta(days=EVENT_RETENTION_DAYS)).isoformat()
+        vtn.prune_events(program_id, keep_from)
+    except Exception as exc:  # housekeeping must never block publishing
+        log.warning("pruning old events failed: %s", exc)
     summary = {
         "day": day.isoformat(),
         "event_id": event["id"],
@@ -108,8 +122,12 @@ def publish_day(
         "window_quarters": sum(flags),
         "prices": len(prices),
         "forecast_quarters": len(forecast),
+        "complete": complete,
     }
-    log.info("published %s", summary)
+    if complete:
+        log.info("published %s", summary)
+    else:
+        log.warning("published placeholder without forecast, will retry: %s", summary)
     return summary
 
 
@@ -144,17 +162,31 @@ def run_forever(settings: Settings, tick_seconds: int = 30) -> None:  # pragma: 
                 log.warning("reading collection failed: %s", exc)
             last_quarter = quarter
 
-        local = now.astimezone(LOCAL_TZ)
-        today, tomorrow = local.date(), local.date() + dt.timedelta(days=1)
-        due = [d for d in (today,) if not db.is_published(conn, d)]
-        if local.time() >= settings.publish_time_local and not db.is_published(conn, tomorrow):
-            due.append(tomorrow)
+        due = due_days(now, settings.publish_time_local, lambda d: db.is_published(conn, d))
         if due and time.monotonic() >= retry_after:
             for day in due:
                 try:
-                    publish_day(settings, conn, vtn, day, now=now)
+                    if not publish_day(settings, conn, vtn, day, now=now)["complete"]:
+                        retry_after = time.monotonic() + RETRY_SECONDS
                 except Exception as exc:
                     log.error("publishing %s failed, retrying in 15 min: %s", day, exc)
-                    retry_after = time.monotonic() + 900
+                    retry_after = time.monotonic() + RETRY_SECONDS
                     break
         time.sleep(tick_seconds)
+
+
+def due_days(now: dt.datetime, publish_time_local: dt.time, is_published: Callable[[dt.date], bool]) -> list[dt.date]:
+    """Market days whose event still needs publishing.
+
+    The current market day (CET/CEST date) is always due until done. The next one
+    becomes due at the local (Lisbon) publish time *on the current market day's
+    date*, i.e. after OMIE has published it. Between 23:00 and 24:00 Lisbon the
+    market day has already rolled over, and the day after is not yet published.
+    """
+    current = now.astimezone(MARKET_TZ).date()
+    due = [current] if not is_published(current) else []
+    nxt = current + dt.timedelta(days=1)
+    publish_at = dt.datetime.combine(current, publish_time_local, LOCAL_TZ)
+    if now >= publish_at and not is_published(nxt):
+        due.append(nxt)
+    return due

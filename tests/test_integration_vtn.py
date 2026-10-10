@@ -131,3 +131,14 @@ def test_wrong_secret_is_rejected():
     bad = VtnClient(VTN_URL, "nobody", "wrong")
     with pytest.raises(httpx.HTTPStatusError):
         bad.programs()
+
+
+def test_publishing_prunes_events_older_than_a_week(env):
+    settings, conn = env
+    bl = VtnClient(settings.vtn_url, settings.bl_client_id, settings.bl_client_secret)
+    old, new = dt.date(2026, 9, 30), dt.date(2026, 10, 12)
+    for day in (old, new):
+        publish_day(settings, conn, bl, day, prices_fetcher=fixture_prices,
+                    forecast_fetcher=lambda s, d=day: {q: 2.5 for q in quarter_starts(d)})
+    names = [e["eventName"] for e in bl.events(bl.find_program_id(settings.program_name))]
+    assert names == ["open-rec 2026-10-12 steer"]

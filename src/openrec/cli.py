@@ -9,7 +9,7 @@ import sys
 
 from . import db
 from .config import Settings
-from .logic import LOCAL_TZ, UTC
+from .logic import MARKET_TZ, UTC
 
 
 def _date(value: str) -> dt.date:
@@ -53,7 +53,7 @@ def cmd_publish(settings: Settings, args) -> int:
     conn = db.connect(settings.database_url)
     db.init_schema(conn)
     vtn = VtnClient(settings.vtn_url, settings.bl_client_id, settings.bl_client_secret)
-    day = args.day or (dt.datetime.now(LOCAL_TZ).date() + dt.timedelta(days=1))
+    day = args.day or (dt.datetime.now(MARKET_TZ).date() + dt.timedelta(days=1))
     print(publish_day(settings, conn, vtn, day))
     return 0
 
@@ -81,11 +81,11 @@ def cmd_report(settings: Settings, args) -> int:
         print("HA_PV_ENERGY_ENTITY and HA_HOUSE_ENERGY_ENTITY are required", file=sys.stderr)
         return 2
     conn = db.connect(settings.database_url)
-    start = dt.datetime.combine(settings.test_plan_start, dt.time(0), LOCAL_TZ).astimezone(UTC)
+    start = dt.datetime.combine(settings.test_plan_start, dt.time(0), MARKET_TZ).astimezone(UTC)
     end = dt.datetime.now(UTC)
     pv = interval_energy(db.load_readings(conn, settings.ha_pv_energy_entity, start, end))
     house = interval_energy(db.load_readings(conn, settings.ha_house_energy_entity, start, end))
-    days = daily_metrics(pv, house)
+    days = daily_metrics(pv, house, tz=MARKET_TZ)  # same day boundary as the events
     print(format_summary(compare(days, settings.test_plan_start, settings.test_plan_seed)))
     return 0
 

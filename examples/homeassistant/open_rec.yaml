@@ -14,7 +14,8 @@
 # and your normal water-heater automation takes over again.
 #
 # Your normal thermostat automation should skip while input_boolean.open_rec_heater_boost
-# is on, so the two don't fight. The element's own thermostat and safety cut-out
+# is on, so the two don't fight, and should also trigger when it turns off, so it
+# takes over again straight away. The element's own thermostat and safety cut-out
 # remain the hardware limit; this package never overrides them.
 
 input_boolean:

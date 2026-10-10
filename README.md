@@ -17,10 +17,10 @@ HA energy counters ─┘      (business logic)                                 
 ```
 
 - **Service** (`open-rec run`): every 15 minutes it stores the PV and house energy counters from Home Assistant. Each afternoon it publishes tomorrow's event.
-- **Event**: 92–100 intervals of 15 minutes, aligned to the OMIE market day (00:00 CET). Each interval carries `PRICE` (EUR/kWh, informational) and `SIMPLE` (1 = surplus window, 0 = normal).
-- **Surplus window**: forecast PV (capped at the inverter limit) minus the median house load for that quarter-hour over the last 14 days is at least `SURPLUS_THRESHOLD_KW`. Optionally any quarter with a price at or below zero also counts. Windows shorter than `MIN_WINDOW_QUARTERS` are dropped.
+- **Event**: 92–100 intervals of 15 minutes, aligned to the OMIE market day (00:00 CET, which is 23:00 in Lisbon). Tomorrow's event is published after the local publish time on the current market day, once OMIE has cleared it. Events older than 7 days are pruned from the VTN. Each interval carries `PRICE` (EUR/kWh, informational) and `SIMPLE` (1 = surplus window, 0 = normal).
+- **Surplus window**: forecast PV (capped at the inverter limit) minus the median house load for that quarter-hour over the last 14 days is at least `SURPLUS_THRESHOLD_KW`. Optionally (`NEGATIVE_PRICE_WINDOWS`, off by default) any quarter with a price at or below zero also counts; that's only useful on a wholesale-indexed tariff. Windows shorter than `MIN_WINDOW_QUARTERS` are dropped.
 - **VEN bridge** (`open-rec ven`): polls the VTN and switches one Home Assistant helper, `input_boolean.open_rec_surplus_window`. Your Home Assistant automations decide what each device does with it, so thermostats, safety cut-outs and manual overrides stay in Home Assistant.
-- **Fail safe**: no event, a missing forecast, or the VTN unreachable for three polls in a row all mean the window is off.
+- **Fail safe**: no event, a missing forecast, or the VTN unreachable for three polls in a row all mean the window is off. A day published without a forecast is an all-zero placeholder and is retried every 15 minutes, so a steer day can't silently turn into a control day.
 
 ### Measuring the effect
 
@@ -54,7 +54,7 @@ Copy [`examples/homeassistant/open_rec.yaml`](examples/homeassistant/open_rec.ya
 - **Window on:** heat the tank up to a boost limit (default 65 °C, adjustable), with 2 °C hysteresis.
 - **Window off, tank at the limit, sensor unavailable, or Home Assistant restart:** switch off only what open-rec switched on.
 
-Your normal water-heater automation should skip while `input_boolean.open_rec_heater_boost` is on. The element's own thermostat and cut-out stay the hardware limit. The package passes Home Assistant's `check_config` (tested with 2026.2).
+Your normal water-heater automation should skip while `input_boolean.open_rec_heater_boost` is on, and should also trigger when it turns off, so it takes over again straight away. The element's own thermostat and cut-out stay the hardware limit. The package passes Home Assistant's `check_config` (tested with 2026.2).
 
 ### Commands
 
