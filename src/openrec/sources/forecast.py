@@ -9,6 +9,7 @@ stamped t covers [t - 15 min, t).
 from __future__ import annotations
 
 import datetime as dt
+import math
 
 import httpx
 
@@ -27,6 +28,8 @@ def parse_open_meteo(payload: dict, kwp: float, performance_ratio: float, max_kw
     block = payload["minutely_15"]
     out = {}
     for stamp, gti in zip(block["time"], block["global_tilted_irradiance"]):
+        if gti is None or not math.isfinite(gti):
+            continue  # Unknown radiation must remain missing, not become valid zero.
         end = dt.datetime.fromisoformat(stamp).replace(tzinfo=UTC)
         out[end - QUARTER] = gti_to_kw(gti, kwp, performance_ratio, max_kw)
     return out
@@ -52,6 +55,7 @@ def fetch_pv_forecast(
         "azimuth": azimuth,
         "timezone": "UTC",
         "forecast_days": days,
+        "past_days": 1,  # Madrid's current market day starts on the preceding UTC date.
     }
     own = client is None
     client = client or httpx.Client(timeout=20)

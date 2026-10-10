@@ -65,6 +65,9 @@ def surplus_flags(
     """
     raw = []
     for q in quarters:
+        if q not in pv_forecast_kw or baseload[local_slot(q)] == float('inf'):
+            raw.append(0)
+            continue
         pv = min(pv_forecast_kw.get(q, 0.0), pv_max_kw)
         surplus = pv - baseload[local_slot(q)]
         price = prices_eur_mwh.get(q)

@@ -72,7 +72,7 @@ def cmd_collect(settings: Settings, _args) -> int:
 
 
 def cmd_report(settings: Settings, args) -> int:
-    from .report import compare, daily_metrics, format_summary, interval_energy
+    from .report import compare, daily_metrics, format_daily, format_summary, interval_energy
 
     if not settings.test_plan_start:
         print("TEST_PLAN_START is not set", file=sys.stderr)
@@ -85,7 +85,9 @@ def cmd_report(settings: Settings, args) -> int:
     end = dt.datetime.now(UTC)
     pv = interval_energy(db.load_readings(conn, settings.ha_pv_energy_entity, start, end))
     house = interval_energy(db.load_readings(conn, settings.ha_house_energy_entity, start, end))
-    days = daily_metrics(pv, house, tz=MARKET_TZ)  # same day boundary as the events
+    days = daily_metrics(pv, house, tz=MARKET_TZ, now=end)  # only completed market days
+    print(format_daily(days, settings.test_plan_start, settings.test_plan_seed))
+    print()
     print(format_summary(compare(days, settings.test_plan_start, settings.test_plan_seed)))
     return 0
 
@@ -117,8 +119,8 @@ def cmd_ven(settings: Settings, _args) -> int:
         print("HA_URL and HA_TOKEN are required", file=sys.stderr)
         return 2
     vtn = VtnClient(settings.vtn_url, settings.ven_client_id, settings.ven_client_secret)
-    vtn.ensure_ven(settings.ven_name)
-    bridge = Bridge(vtn, HomeAssistant(settings.ha_url, settings.ha_token), settings.ha_window_entity, settings.program_name)
+    bridge = Bridge(vtn, HomeAssistant(settings.ha_url, settings.ha_token), settings.ha_window_entity,
+                    settings.program_name, lease_entity=settings.ha_lease_entity, ven_name=settings.ven_name)
     run_forever(bridge)
     return 0
 

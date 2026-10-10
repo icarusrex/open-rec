@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime as dt
 import logging
+import math
 import time
 from collections.abc import Callable
 
@@ -15,6 +16,7 @@ from .logic import (
     UTC,
     baseload_profile,
     build_event,
+    local_slot,
     quarter_starts,
     surplus_flags,
 )
@@ -59,8 +61,12 @@ def baseload_from_history(conn, settings: Settings, now: dt.datetime) -> list[fl
     steered = {}
     if settings.ha_steered_energy_entity:
         steered = interval_energy(db.load_readings(conn, settings.ha_steered_energy_entity, since, now))
-    kw = {q: max(kwh - steered.get(q, 0.0), 0.0) * 4 for q, kwh in house.items()}
-    return baseload_profile(kw, settings.baseload_kw_default)
+    steered_covered = steered.covered_quarters() if steered else set()
+    kw = {q: max(house[q] - (steered[q] if q in steered_covered else 0.0), 0.0) * 4
+          for q in house.covered_quarters()}
+    # A configured but unobserved slot is not the same as choosing no meter.
+    # Infinity suppresses windows instead of guessing a smaller house load.
+    return baseload_profile(kw, float('inf'))
 
 
 def publish_day(
@@ -73,6 +79,22 @@ def publish_day(
     forecast_fetcher: ForecastFetcher = default_forecast,
     now: dt.datetime | None = None,
 ) -> dict:
+    """Serialize the entire refresh so a delayed fetch cannot overwrite a newer one."""
+    with db.publication_lock(conn, settings.program_name):
+        return _publish_day(settings, conn, vtn, day, prices_fetcher=prices_fetcher,
+                            forecast_fetcher=forecast_fetcher, now=now)
+
+
+def _publish_day(
+    settings: Settings,
+    conn,
+    vtn: VtnClient,
+    day: dt.date,
+    *,
+    prices_fetcher: PriceFetcher,
+    forecast_fetcher: ForecastFetcher,
+    now: dt.datetime | None,
+) -> dict:
     """Build and publish the event for ``day``. Missing data degrades to fewer windows, never more."""
     now = now or dt.datetime.now(UTC)
     quarters = quarter_starts(day)
@@ -82,13 +104,16 @@ def publish_day(
         db.save_prices(conn, prices_fetcher(day))
     except Exception as exc:  # network, OMIE not yet published, parse error
         log.warning("OMIE prices for %s unavailable: %s", day, exc)
+    forecast = {}
     try:
-        db.save_forecast(conn, forecast_fetcher(settings))
+        fresh = forecast_fetcher(settings)
+        forecast = {q: kw for q, kw in fresh.items() if q in quarters and math.isfinite(kw) and kw >= 0}
+        db.save_forecast(conn, forecast)
     except Exception as exc:
         log.warning("PV forecast unavailable: %s", exc)
 
     prices = db.load_prices(conn, start, end)
-    forecast = db.load_forecast(conn, start, end)
+    # Cached forecasts are an archive, never an implicit freshness fallback.
     baseload = baseload_from_history(conn, settings, now)
     flags = surplus_flags(
         quarters,
@@ -101,17 +126,22 @@ def publish_day(
         negative_price_windows=settings.negative_price_windows,
     )
     steering = is_steering_day(day, settings.test_plan_start, settings.test_plan_seed)
+    baseload_ready = all(math.isfinite(baseload[local_slot(q)]) for q, kw in forecast.items()
+                         if kw >= settings.surplus_threshold_kw
+                         or (settings.negative_price_windows and prices.get(q, float('inf')) <= 0))
+    complete = set(forecast) == set(quarters) and baseload_ready
+    if not steering:
+        flags = [0] * len(quarters)
     program_id = vtn.ensure_program(settings.program_name)
     body = build_event(program_id, day, quarters, prices, flags, steering=steering)
     event = vtn.upsert_event(body, f"open-rec {day.isoformat()}")
-    # A day without a forecast is published as a safe all-zero placeholder but not
-    # marked done, so the run loop retries; otherwise a steer day would silently
-    # behave like a control day and bias the experiment.
-    complete = len(forecast) >= 0.75 * len(quarters)
     if complete:
         db.mark_published(conn, day, event["id"], steering, sum(flags))
+    else:
+        db.clear_published(conn, day)
     try:
-        keep_from = (day - dt.timedelta(days=EVENT_RETENTION_DAYS)).isoformat()
+        today = now.astimezone(MARKET_TZ).date()
+        keep_from = (today - dt.timedelta(days=EVENT_RETENTION_DAYS)).isoformat()
         vtn.prune_events(program_id, keep_from)
     except Exception as exc:  # housekeeping must never block publishing
         log.warning("pruning old events failed: %s", exc)
@@ -122,12 +152,13 @@ def publish_day(
         "window_quarters": sum(flags),
         "prices": len(prices),
         "forecast_quarters": len(forecast),
+        "baseload_ready": baseload_ready,
         "complete": complete,
     }
     if complete:
         log.info("published %s", summary)
     else:
-        log.warning("published placeholder without forecast, will retry: %s", summary)
+        log.warning("published incomplete forecast/baseload, will retry: %s", summary)
     return summary
 
 

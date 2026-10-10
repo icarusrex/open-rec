@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 from collections.abc import Iterable, Mapping
+from contextlib import contextmanager
 
 import psycopg
 
@@ -35,6 +37,19 @@ CREATE TABLE IF NOT EXISTS published_events (
 
 def connect(url: str) -> psycopg.Connection:
     return psycopg.connect(url, autocommit=True)
+
+
+@contextmanager
+def publication_lock(conn: psycopg.Connection, program_name: str):
+    """Serialize cooperating publishers using the same open-rec database.
+
+    Program-level locking also protects duplicate cleanup and pruning against
+    another day's publication. PostgreSQL releases the lock on rollback/death.
+    """
+    key = int.from_bytes(hashlib.sha256(program_name.encode()).digest()[:8], 'big', signed=True)
+    with conn.transaction():
+        conn.execute('SELECT pg_advisory_xact_lock(%s)', (key,))
+        yield
 
 
 def init_schema(conn: psycopg.Connection) -> None:
@@ -93,6 +108,10 @@ def mark_published(conn: psycopg.Connection, day: dt.date, event_id: str, steeri
 
 def is_published(conn: psycopg.Connection, day: dt.date) -> bool:
     return conn.execute("SELECT 1 FROM published_events WHERE day = %s", (day,)).fetchone() is not None
+
+
+def clear_published(conn: psycopg.Connection, day: dt.date) -> None:
+    conn.execute('DELETE FROM published_events WHERE day = %s', (day,))
 
 
 def published_days(conn: psycopg.Connection) -> Iterable[tuple]:

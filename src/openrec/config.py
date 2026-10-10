@@ -53,6 +53,7 @@ class Settings:
     # Test plan (alternating steering-on / steering-off days)
     test_plan_start: dt.date | None
     test_plan_seed: str
+    ha_lease_entity: str = "timer.open_rec_bridge_lease"
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -87,4 +88,5 @@ class Settings:
             ha_window_entity=_env("HA_WINDOW_ENTITY", "input_boolean.open_rec_surplus_window"),
             test_plan_start=dt.date.fromisoformat(start) if start else None,
             test_plan_seed=_env("TEST_PLAN_SEED", "open-rec"),
+            ha_lease_entity=_env("HA_LEASE_ENTITY", "timer.open_rec_bridge_lease"),
         )

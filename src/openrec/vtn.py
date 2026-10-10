@@ -2,11 +2,23 @@
 
 from __future__ import annotations
 
+import datetime as dt
+import re
 import time
 
 import httpx
 
 PAGE = 50  # openleadr-rs maximum page size
+
+
+def owned_event_day(name: str) -> dt.date | None:
+    match = re.fullmatch(r'open-rec (\d{4}-\d{2}-\d{2}) (steer|control)', name)
+    if match:
+        try:
+            return dt.date.fromisoformat(match[1])
+        except ValueError:
+            pass
+    return None
 
 
 class VtnClient:
@@ -91,7 +103,8 @@ class VtnClient:
         deleted = 0
         for e in self.events(program_id):
             name = e.get("eventName") or ""
-            if name.startswith("open-rec ") and name[9:19] < keep_from:
+            day = owned_event_day(name)
+            if day is not None and day < dt.date.fromisoformat(keep_from):
                 self._request("DELETE", f"/events/{e['id']}")
                 deleted += 1
         return deleted
@@ -105,13 +118,14 @@ class VtnClient:
         existing = [
             e
             for e in self.events(body["programID"])
-            if (e.get("eventName") or "").startswith(day_prefix)
+            if owned_event_day(e.get("eventName") or "") == dt.date.fromisoformat(day_prefix.removeprefix('open-rec '))
         ]
         if existing:
             keep, *extra = existing
+            replaced = self._request("PUT", f"/events/{keep['id']}", json=body).json()
             for e in extra:
                 self._request("DELETE", f"/events/{e['id']}")
-            return self._request("PUT", f"/events/{keep['id']}", json=body).json()
+            return replaced
         return self._request("POST", "/events", json=body).json()
 
     # --- VENs -----------------------------------------------------------------

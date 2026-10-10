@@ -24,9 +24,13 @@ class FakeVtn:
 class FakeHA:
     def __init__(self):
         self.calls = []
+        self.leases = []
 
     def set_on(self, entity, on):
         self.calls.append((entity, on))
+
+    def set_lease(self, entity, active):
+        self.leases.append((entity, active))
 
 
 def make_bridge(flags):
@@ -62,3 +66,40 @@ def test_bridge_reasserts_periodically():
     bridge.tick(Q[0] + dt.timedelta(minutes=5))
     bridge.tick(Q[0] + dt.timedelta(minutes=16))
     assert len(ha.calls) == 2
+
+
+def test_invalid_event_cannot_reset_the_failure_counter():
+    bridge, vtn, ha = make_bridge([1] * 96)
+    assert bridge.tick(Q[0]) == 1
+    vtn.events_list[0]['intervalPeriod']['duration'] = 'P1M'
+    for i in range(1, 4):
+        bridge.tick(Q[0] + dt.timedelta(seconds=30 * i))
+    assert bridge._failures >= 3
+    assert ha.calls[-1] == ('input_boolean.w', False)
+
+
+def test_registration_failure_clears_existing_permission_and_retries():
+    bridge, vtn, ha = make_bridge([1] * 96)
+    bridge.ven_name = 'home-1'
+    attempts = []
+
+    def register(name):
+        attempts.append(name)
+        raise ConnectionError('registration down')
+
+    vtn.ensure_ven = register
+    assert bridge.tick(Q[0]) == 0
+    assert bridge.tick(Q[0] + dt.timedelta(seconds=30)) == 0
+    assert attempts == ['home-1', 'home-1']
+    assert ha.calls[0] == ('input_boolean.w', False)
+    assert not any(active for _, active in ha.leases)
+
+
+def test_only_valid_polls_renew_the_ha_lease():
+    bridge, vtn, ha = make_bridge([1] * 96)
+    bridge.tick(Q[0])
+    assert ha.leases[-1] == ('timer.open_rec_bridge_lease', True)
+    count = len(ha.leases)
+    vtn.fail = True
+    bridge.tick(Q[0] + dt.timedelta(seconds=30))
+    assert len(ha.leases) == count
