@@ -142,3 +142,12 @@ def test_publishing_prunes_events_older_than_a_week(env):
                     forecast_fetcher=lambda s, d=day: {q: 2.5 for q in quarter_starts(d)})
     names = [e["eventName"] for e in bl.events(bl.find_program_id(settings.program_name))]
     assert names == ["open-rec 2026-10-12 steer"]
+
+
+def test_bootstrap_rerun_updates_scopes():
+    with db.connect(VTN_DB) as conn:
+        conn.execute(bootstrap_sql("rerun-bl", "s1", "rerun-ven", "s2"))
+        conn.execute("UPDATE \"user\" SET scopes = '{read_all}' WHERE id = 'rerun-bl'")
+        conn.execute(bootstrap_sql("rerun-bl", "s1", "rerun-ven", "s2"))
+        (scopes,) = conn.execute("SELECT scopes::text[] FROM \"user\" WHERE id = 'rerun-bl'").fetchone()
+    assert sorted(scopes) == ["read_all", "write_events", "write_programs"]

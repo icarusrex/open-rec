@@ -11,16 +11,10 @@ import secrets
 
 from argon2 import PasswordHasher
 
-BL_SCOPES = [
-    "read_all",
-    "write_programs",
-    "write_events",
-    "write_vens_bl",
-    "write_reports_bl",
-    "write_subscriptions_bl",
-    "write_users",
-]
-VEN_SCOPES = ["read_targets", "read_ven_objects", "write_reports_ven", "write_subscriptions_ven", "write_vens_ven"]
+# Least privilege: only what the code uses. The service reads everything and
+# writes programs and events; the VEN bridge reads its events and registers itself.
+BL_SCOPES = ["read_all", "write_programs", "write_events"]
+VEN_SCOPES = ["read_targets", "read_ven_objects", "write_vens_ven"]
 
 
 def new_secret() -> str:
@@ -37,7 +31,7 @@ def user_sql(user_id: str, client_id: str, secret: str, scopes: list[str], descr
     return (
         f'INSERT INTO "user" (id, reference, description, scopes, created, modified) '
         f"VALUES ({_sql_str(user_id)}, {_sql_str(user_id)}, {_sql_str(description)}, {scope_array}, now(), now()) "
-        f"ON CONFLICT (id) DO NOTHING;\n"
+        f"ON CONFLICT (id) DO UPDATE SET scopes = EXCLUDED.scopes, modified = now();\n"
         f"INSERT INTO user_credentials (user_id, client_id, client_secret) "
         f"VALUES ({_sql_str(user_id)}, {_sql_str(client_id)}, {_sql_str(hashed)}) "
         f"ON CONFLICT (client_id) DO UPDATE SET client_secret = EXCLUDED.client_secret;\n"
