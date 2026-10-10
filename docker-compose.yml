@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: openadr
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d openadr"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "127.0.0.1:${PG_PORT}:5432"
+    volumes:
+      - database-data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+
+  vtn:
+    image: ghcr.io/openleadr/openleadr-rs:v0.2.7  # release tested with open-rec
+    environment:
+      RUST_LOG: openleadr_vtn=info
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASSWORD}@db:5432/openadr
+      OAUTH_TYPE: INTERNAL
+      OAUTH_BASE64_SECRET: ${OAUTH_BASE64_SECRET}
+      OAUTH_TOKEN_URL: ${VTN_PUBLIC_URL}/auth/token
+    ports:
+      - "${VTN_PORT}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  service:
+    build: .
+    command: ["open-rec", "run"]
+    env_file: .env
+    depends_on:
+      - vtn
+    restart: unless-stopped
+
+  ven:
+    build: .
+    command: ["open-rec", "ven"]
+    env_file: .env
+    depends_on:
+      - vtn
+    restart: unless-stopped
+    profiles: ["ven"]
+
+volumes:
+  database-data:
