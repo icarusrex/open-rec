@@ -1,0 +1,93 @@
+# open-rec Home Assistant package
+#
+# Put this file in <config>/packages/ and enable packages in configuration.yaml:
+#   homeassistant:
+#     packages: !include_dir_named packages
+#
+# Then replace the two placeholder entities below with your own:
+#   switch.water_heater              - the relay/contactor that powers the element
+#   sensor.water_heater_temperature  - tank temperature (e.g. DS18B20 on a Shelly Add-on)
+#
+# What it does: while open-rec's surplus window is on, heat the tank up to a
+# higher "boost" temperature using solar surplus. When the window ends, or the
+# tank reaches the boost limit, it switches off only what it switched on itself,
+# and your normal water-heater automation takes over again.
+#
+# Your normal thermostat automation should skip while input_boolean.open_rec_heater_boost
+# is on, so the two don't fight. The element's own thermostat and safety cut-out
+# remain the hardware limit; this package never overrides them.
+
+input_boolean:
+  open_rec_surplus_window:
+    name: open-rec surplus window
+    icon: mdi:solar-power-variant
+  open_rec_heater_boost:
+    name: open-rec heater boost active
+    icon: mdi:water-boiler
+
+input_number:
+  open_rec_boost_max_temp:
+    name: open-rec boost max temperature
+    min: 40
+    max: 75
+    step: 1
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer-high
+    initial: 65
+
+automation:
+  - id: open_rec_boost_start
+    alias: "open-rec: heat water during surplus window"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: input_boolean.open_rec_surplus_window
+        to: "on"
+      - trigger: time_pattern
+        minutes: "/5"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.open_rec_surplus_window
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.open_rec_heater_boost
+        state: "off"
+      - condition: template
+        value_template: >
+          {{ states('sensor.water_heater_temperature') | float(999)
+             < states('input_number.open_rec_boost_max_temp') | float(0) - 2 }}
+    actions:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.open_rec_heater_boost
+      - action: switch.turn_on
+        target:
+          entity_id: switch.water_heater
+
+  - id: open_rec_boost_stop
+    alias: "open-rec: stop boost when window ends or tank is hot"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: input_boolean.open_rec_surplus_window
+        to: "off"
+      - trigger: template
+        value_template: >
+          {{ states('sensor.water_heater_temperature') | float(999)
+             >= states('input_number.open_rec_boost_max_temp') | float(0) }}
+      - trigger: state
+        entity_id: sensor.water_heater_temperature
+        to: "unavailable"
+      - trigger: homeassistant
+        event: start
+    conditions:
+      - condition: state
+        entity_id: input_boolean.open_rec_heater_boost
+        state: "on"
+    actions:
+      - action: switch.turn_off
+        target:
+          entity_id: switch.water_heater
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.open_rec_heater_boost

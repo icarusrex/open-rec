@@ -1,5 +1,7 @@
 # open-rec
 
+[![CI](https://github.com/icarusrex/open-rec/actions/workflows/ci.yml/badge.svg)](https://github.com/icarusrex/open-rec/actions/workflows/ci.yml)
+
 Open-source tools to run a small Portuguese energy community (*autoconsumo coletivo*) and steer its homes with an **OpenADR 3** VTN.
 
 open-rec turns tomorrow's solar surplus forecast and OMIE day-ahead prices into one OpenADR event of 15-minute intervals, publishes it to an [openleadr-rs](https://github.com/OpenLEADR/openleadr-rs) VTN, and lets each home follow it through Home Assistant. It also measures whether steering works, using paired steer/control days.
@@ -24,7 +26,7 @@ HA energy counters ─┘      (business logic)                                 
 
 Comparing a winter baseline with spring steering would mostly measure the season. Instead, from `TEST_PLAN_START` days are grouped in consecutive pairs, and one day of each pair is randomly (and reproducibly) a **steer** day while the other is a **control** day. On control days the event is still published, with every `SIMPLE` value at 0.
 
-`open-rec report` computes each day's self-consumption ratio (self-consumed kWh ÷ PV kWh, from 15-minute data). It reports the mean steer-minus-control difference over complete pairs, plus a breakdown by PV-yield band.
+`open-rec report` computes each day's self-consumption ratio (self-consumed kWh ÷ PV kWh, from 15-minute data). It reports the mean steer-minus-control difference over complete pairs, how many pairs improved with an exact two-sided sign test, and a breakdown by PV-yield band.
 
 ## Getting started
 
@@ -45,7 +47,14 @@ docker compose run --rm service open-rec publish   # publish tomorrow now instea
 docker compose --profile ven up -d ven
 ```
 
-In Home Assistant, create a toggle helper named `open_rec_surplus_window` and an automation that uses it. For example: while it is on, allow the water heater to run; when it turns off, return to the normal schedule.
+### Home Assistant
+
+Copy [`examples/homeassistant/open_rec.yaml`](examples/homeassistant/open_rec.yaml) into your Home Assistant `packages/` folder and replace the two placeholder entities (`switch.water_heater`, `sensor.water_heater_temperature`). The package creates the `open_rec_surplus_window` helper the VEN bridge switches, plus two automations:
+
+- **Window on:** heat the tank up to a boost limit (default 65 °C, adjustable), with 2 °C hysteresis.
+- **Window off, tank at the limit, sensor unavailable, or Home Assistant restart:** switch off only what open-rec switched on.
+
+Your normal water-heater automation should skip while `input_boolean.open_rec_heater_boost` is on. The element's own thermostat and cut-out stay the hardware limit. The package passes Home Assistant's `check_config` (tested with 2026.2).
 
 ### Commands
 
@@ -69,6 +78,7 @@ All settings come from environment variables. See [`.env.example`](.env.example)
 | `PV_MAX_KW` | 3.0 | Inverter output cap |
 | `SURPLUS_THRESHOLD_KW` | 1.0 | Minimum forecast surplus to open a window |
 | `HA_PV_ENERGY_ENTITY`, `HA_HOUSE_ENERGY_ENTITY` | – | Cumulative kWh sensors for PV and whole-house consumption |
+| `HA_STEERED_ENERGY_ENTITY` | – | Optional kWh sensor of the steered load, subtracted from the baseload so steering doesn't shrink future windows |
 | `TEST_PLAN_START` | empty | First day of the steer/control plan (empty = always steer) |
 
 ## Testing
@@ -83,7 +93,7 @@ The integration test in `tests/test_integration_vtn.py` runs against a live VTN.
 ## Roadmap
 
 - [x] v0.1: one-home prototype: prices, forecast, readings, events, VEN bridge, paired test plan and report
-- [ ] E-Redes 15-minute data import from the EGAC reserved area
+- [ ] E-Redes data import: daily `sgl_v2` files over sFTP (one per installation, plus energy-for-sharing). The record types are documented (`00` header, `01` description, `04` service list, `20` detail per 15 min, `99` totals), but the byte layout and service codes need a real file, which arrives after certification
 - [ ] Monthly per-member statements (donation model first)
 - [ ] Sharing-coefficient engine with export in the E-Redes format
 - [ ] Onboarding and paperwork assistant (internal regulation, member agreements, DGEG filing pack)

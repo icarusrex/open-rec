@@ -43,11 +43,19 @@ def default_forecast(settings: Settings) -> dict:
 
 
 def baseload_from_history(conn, settings: Settings, now: dt.datetime) -> list[float]:
-    """Median house load per quarter-hour over the last 14 days, from HA readings."""
+    """Median house load per quarter-hour over the last 14 days, from HA readings.
+
+    If the steered load has its own energy meter, its consumption is subtracted,
+    so past steering doesn't inflate the baseload and shrink future windows.
+    """
     if not settings.ha_house_energy_entity:
         return [settings.baseload_kw_default] * 96
-    snaps = db.load_readings(conn, settings.ha_house_energy_entity, now - dt.timedelta(days=14), now)
-    kw = {q: kwh * 4 for q, kwh in interval_energy(snaps).items()}
+    since = now - dt.timedelta(days=14)
+    house = interval_energy(db.load_readings(conn, settings.ha_house_energy_entity, since, now))
+    steered = {}
+    if settings.ha_steered_energy_entity:
+        steered = interval_energy(db.load_readings(conn, settings.ha_steered_energy_entity, since, now))
+    kw = {q: max(kwh - steered.get(q, 0.0), 0.0) * 4 for q, kwh in house.items()}
     return baseload_profile(kw, settings.baseload_kw_default)
 
 
@@ -109,7 +117,7 @@ def collect_readings(settings: Settings, conn, ha: HomeAssistant, now: dt.dateti
     """Snapshot the cumulative kWh counters from Home Assistant. Returns how many were stored."""
     now = now or dt.datetime.now(UTC)
     stored = 0
-    for entity in (settings.ha_pv_energy_entity, settings.ha_house_energy_entity):
+    for entity in (settings.ha_pv_energy_entity, settings.ha_house_energy_entity, settings.ha_steered_energy_entity):
         if not entity:
             continue
         value = ha.state(entity)

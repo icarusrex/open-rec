@@ -14,6 +14,7 @@ A second view groups days into terciles of PV yield.
 from __future__ import annotations
 
 import datetime as dt
+import math
 import statistics
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -87,6 +88,29 @@ class Summary:
     paired_diffs: list[float]
     bands: list[tuple[str, int, float | None, int, float | None]]  # label, n_on, mean_on, n_off, mean_off
 
+    @property
+    def improved_pairs(self) -> int:
+        return sum(1 for d in self.paired_diffs if d > 0)
+
+    @property
+    def sign_test_p(self) -> float | None:
+        return sign_test_p(self.paired_diffs)
+
+
+def sign_test_p(diffs: Sequence[float]) -> float | None:
+    """Exact two-sided sign test: how surprising is this many improved pairs if steering did nothing?
+
+    Ties (zero differences) are dropped. No distribution assumptions, so it suits
+    a small number of noisy pairs.
+    """
+    nonzero = [d for d in diffs if d != 0]
+    n = len(nonzero)
+    if n == 0:
+        return None
+    k = sum(1 for d in nonzero if d > 0)
+    tail = sum(math.comb(n, i) for i in range(min(k, n - k) + 1)) / 2**n
+    return min(1.0, 2 * tail)
+
 
 def compare(days: Sequence[DayMetrics], start: dt.date, seed: str) -> Summary:
     plan_days = [d for d in days if d.day >= start and d.pv_kwh > 0]
@@ -120,6 +144,9 @@ def format_summary(summary: Summary) -> str:
         f"Complete on/off pairs: {summary.pairs}",
         "Mean paired difference in self-consumption ratio (steer - control): "
         + ("n/a" if summary.mean_paired_diff is None else f"{summary.mean_paired_diff * 100:+.1f} pp"),
+        "Pairs where steering did better: "
+        + f"{summary.improved_pairs} of {summary.pairs}"
+        + ("" if summary.sign_test_p is None else f" (sign test, two-sided p = {summary.sign_test_p:.3f})"),
         "",
         f"{'PV yield band':<14}{'steer days':>11}{'steer ratio':>13}{'control days':>14}{'control ratio':>15}",
     ]

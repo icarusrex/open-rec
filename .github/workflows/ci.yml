@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: openadr
+          POSTGRES_PASSWORD: openadr
+          POSTGRES_DB: openadr
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U openadr -d openadr"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -e ".[dev]" ruff
+
+      - name: Lint
+        run: ruff check src tests
+
+      - name: Start the VTN (openleadr-rs, version pinned in docker-compose.yml)
+        run: |
+          PGPASSWORD=openadr psql -h localhost -U openadr -d openadr -c "CREATE DATABASE openrec_test"
+          docker run -d --name vtn --network host \
+            -e DATABASE_URL=postgres://openadr:openadr@localhost:5432/openadr \
+            -e OAUTH_TYPE=INTERNAL \
+            -e OAUTH_BASE64_SECRET="$(openssl rand -base64 32)" \
+            -e OAUTH_TOKEN_URL=http://localhost:3000/auth/token \
+            ghcr.io/openleadr/openleadr-rs:v0.2.7
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/programs || true)
+            [ "$code" = "401" ] && echo "VTN up" && exit 0
+            sleep 2
+          done
+          docker logs vtn; exit 1
+
+      - name: Test (unit + live VTN)
+        env:
+          OPENREC_TEST_VTN_URL: http://localhost:3000
+          OPENREC_TEST_VTN_DATABASE_URL: postgresql://openadr:openadr@localhost:5432/openadr
+          OPENREC_TEST_DATABASE_URL: postgresql://openadr:openadr@localhost:5432/openrec_test
+        run: pytest -v
+
+      - name: VTN logs on failure
+        if: failure()
+        run: docker logs vtn || true

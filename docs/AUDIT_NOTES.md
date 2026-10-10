@@ -15,7 +15,7 @@ The software side of a one-home pilot for a Portuguese collective self-consumpti
 | 3 | Measures honestly: paired steer/control days; report compares within pairs and by PV-yield band | `testplan.py`, `report.py`, `tests/test_testplan.py`, `tests/test_report.py::test_compare_recovers_known_effect_despite_seasonal_trend` |
 | 4 | Simple: one Python package, 5 runtime dependencies, no ERP, config in `.env`, device logic in Home Assistant | `pyproject.toml`, `config.py`, `ven.py` docstring |
 | 5 | Fails safe: no event, no forecast, or VTN down means the window is off; no secrets committed; no direct device switching by default | `logic.current_flag`, `logic.surplus_flags`, `tests/test_ven.py::test_bridge_holds_through_brief_outage_then_fails_safe`, `.gitignore`, `bootstrap.py` |
-| 6 | Tested: unit and live-integration tests pass; lint clean | 31 tests pass (28 unit + 3 live); `ruff check` clean |
+| 6 | Tested: unit and live-integration tests pass; lint clean | 34 tests pass (31 unit + 3 live); `ruff check` clean; CI (`.github/workflows/ci.yml`) runs all of them against the pinned VTN image on every push |
 | 7 | Documented in the format of the reference repo (openleadr-rs: what it is, how it works, getting started, configuration, testing, roadmap, licence; `.env` + compose pattern) | `README.md`, `.env.example` |
 
 ## How to reproduce
@@ -45,6 +45,8 @@ pytest tests/test_integration_vtn.py
 | `src/openrec/bootstrap.py` | SQL that creates the business-logic and VEN clients in the VTN database (argon2 hashes) |
 | `src/openrec/sources/` | OMIE (via pyomie), Open-Meteo PV forecast, Home Assistant REST |
 | `src/openrec/db.py` | open-rec's own tables, in a database separate from the VTN's |
+| `examples/homeassistant/open_rec.yaml` | Home Assistant package: the window helper and water-heater boost automations |
+| `.github/workflows/ci.yml` | CI: lint, unit tests, live VTN tests (openleadr-rs v0.2.7 container) |
 
 ## Design decisions to challenge
 
@@ -61,16 +63,18 @@ pytest tests/test_integration_vtn.py
     - `pyomie` returns 92/96/100 Portuguese quarter prices for the market day; `map_quarters` raises otherwise.
     - Open-Meteo `minutely_15=global_tilted_irradiance` with `tilt`/`azimuth` (0 = south) works for this location. The code assumes values are means over the *preceding* 15 minutes.
 - **Docker images were not built or pulled here** (registry blocked). The VTN binary was compiled from the v0.2.7 source and run directly. The `Dockerfile` and the compose `service` have not been built.
-- **The baseload includes the steered load.** The 14-day median of whole-house consumption includes water-heater runs. With a 3 kW element this can inflate the midday baseload and shrink future windows. A fix would be to subtract the heater's own metered energy once that sensor exists.
+- **Baseload and the steered load (fixed in v0.1.1).** Setting `HA_STEERED_ENERGY_ENTITY` subtracts the steered load's own meter from house load before taking the median (`tests/test_service.py`). Without that sensor, the old behaviour remains: past steering can inflate the midday baseload.
 - **Load size vs surplus.** The 2.7 kWp array, capped at 3 kW, rarely produces more than the 3 kW element draws, so a window can still import some grid energy. The report measures this honestly, since the ratio uses actual 15-minute flows. A proportional (PWM) diverter would match load to surplus better.
 - **The VEN polls** every 30 s. It doesn't use subscriptions or MQTT, and it sends no OpenADR reports back; measurement comes from Home Assistant counters instead.
-- **No E-Redes import, statements, or coefficient engine yet.** These are on the roadmap.
+- **No E-Redes import, statements, or coefficient engine yet.** E-Redes delivers daily `sgl_v2` files over sFTP. Its EGAC document lists the record types (`00`, `01`, `04`, `20`, `99`) and fields, but not the delimiter, byte layout or service-code meanings. The parser is deliberately deferred until a real file exists, rather than guessed.
+- **Home Assistant package:** it passes `hass --script check_config` on Home Assistant 2026.2, and an injected typo is rejected, so the check is meaningful. Its runtime behaviour (boost start, stop, hysteresis, restart) has not been exercised in a running Home Assistant.
+- **CI workflow is unverified until its first run** on GitHub (it pulls `ghcr.io/openleadr/openleadr-rs:v0.2.7`, which this sandbox couldn't).
 - **Licence is Apache-2.0** to match openleadr-rs. The owner may prefer AGPL-3 if he later builds on the Som Comunitats Odoo modules.
 
 ## Questions for the reviewer
 
 1. Is any interval-alignment bug possible around DST changes (market day in CET vs Lisbon local slots)?
 2. Does `current_flag` choose correctly when an old and a replaced event overlap?
-3. Is the paired comparison statistically sound for ~20–40 pairs, or is a sign test or bootstrap CI needed before claiming an effect?
+3. The report now adds an exact two-sided sign test over pairs (`report.sign_test_p`, tested against known binomial values). Is that enough for ~20–40 pairs, or is a bootstrap CI on the mean difference also needed?
 4. Is there any path where a failure turns a window *on*?
 5. Is anything here more complex than the owner's "as simple as possible" constraint justifies?

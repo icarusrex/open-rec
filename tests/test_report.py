@@ -70,3 +70,12 @@ def test_compare_recovers_known_effect_despite_seasonal_trend():
     assert len(s.bands) == 3
     text = format_summary(s)
     assert "Complete on/off pairs: 20" in text and " pp" in text
+
+
+def test_sign_test_p_values():
+    from openrec.report import sign_test_p
+
+    assert sign_test_p([0.01] * 10) == pytest.approx(2 / 1024)
+    assert sign_test_p([0.01] * 5 + [-0.01] * 5) == 1.0
+    assert sign_test_p([0.01] * 15 + [-0.01] * 5) == pytest.approx(0.04139, abs=1e-4)
+    assert sign_test_p([0.0, 0.0]) is None

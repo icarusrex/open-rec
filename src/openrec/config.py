@@ -48,6 +48,7 @@ class Settings:
     ha_token: str | None
     ha_pv_energy_entity: str | None
     ha_house_energy_entity: str | None
+    ha_steered_energy_entity: str | None  # optional meter on the steered load (e.g. water heater)
     ha_window_entity: str
     # Test plan (alternating steering-on / steering-off days)
     test_plan_start: dt.date | None
@@ -82,6 +83,7 @@ class Settings:
             ha_token=_env("HA_TOKEN"),
             ha_pv_energy_entity=_env("HA_PV_ENERGY_ENTITY"),
             ha_house_energy_entity=_env("HA_HOUSE_ENERGY_ENTITY"),
+            ha_steered_energy_entity=_env("HA_STEERED_ENERGY_ENTITY"),
             ha_window_entity=_env("HA_WINDOW_ENTITY", "input_boolean.open_rec_surplus_window"),
             test_plan_start=dt.date.fromisoformat(start) if start else None,
             test_plan_seed=_env("TEST_PLAN_SEED", "open-rec"),
