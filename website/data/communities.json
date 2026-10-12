@@ -1,0 +1,267 @@
+[
+  {
+    "id": "pt-telheiras",
+    "name": "Telheiras / Lumiar",
+    "country": "Portugal",
+    "location": "Lisboa",
+    "category": "Local sharing",
+    "status": "Reported operational",
+    "summary": "A neighbourhood solar community promoted by Viver Telheiras and the Lumiar parish council, with vulnerable households included.",
+    "evidence": "The organiser reports two production units and 70 members on its community page. This is an organiser report, not an independent outcome audit.",
+    "lesson": "Build participation and advice around a local organisation people already know.",
+    "unknowns": "Audited savings, current joining availability and registration documents have not been verified.",
+    "sources": [
+      {
+        "label": "Viver Telheiras: community and participation",
+        "url": "https://vivertelheiras.pt/certelheiras/"
+      }
+    ],
+    "tags": [
+      "solar",
+      "inclusion",
+      "CER",
+      "Lisbon"
+    ],
+    "website": "https://vivertelheiras.pt/certelheiras/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-agra-amial",
+    "name": "Agra do Amial",
+    "country": "Portugal",
+    "location": "Porto",
+    "category": "Local sharing",
+    "status": "Reported operational",
+    "summary": "A solar energy community involving municipal housing and a local school, developed through Asprela + Sustentável.",
+    "evidence": "The municipality describes the community as an ERSE pilot. Porto’s 2024 sustainability report says it began operating in May 2024.",
+    "lesson": "Municipal buildings and housing can anchor a community with a social purpose.",
+    "unknowns": "Current membership, independently measured savings and open participation have not been verified.",
+    "sources": [
+      {
+        "label": "Porto: community project",
+        "url": "https://naturebasedsolutions.porto.pt/nbs/comunidade-energetica-do-bairro-da-agra-do-amial/"
+      },
+      {
+        "label": "Porto: 2024 sustainability report",
+        "url": "https://www.cm-porto.pt/files/uploads/cms/Relatorio_Desenvolvimento_Sustentavel_2024_Porto_Futuro_PT.pdf"
+      }
+    ],
+    "tags": [
+      "solar",
+      "municipal",
+      "CER",
+      "social housing"
+    ],
+    "website": "https://asprelamaissustentavel.pt/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-coopernico",
+    "name": "Coopérnico",
+    "country": "Portugal",
+    "location": "Portugal mainland",
+    "category": "Cooperative",
+    "status": "Reported active",
+    "summary": "A Portuguese renewable-energy cooperative with citizen investment, electricity supply and community-development support.",
+    "evidence": "Its website documents membership, supply and renewable-generation investment. A nationwide cooperative is a different model from a single local sharing group.",
+    "lesson": "Cooperative ownership can connect member capital to renewable generation.",
+    "unknowns": "Legal CER/CCE classification of individual projects must be checked separately. Member benefits depend on the service or project.",
+    "sources": [
+      {
+        "label": "Coopérnico: membership and services",
+        "url": "https://www.coopernico.org/"
+      },
+      {
+        "label": "Coopérnico: investment model",
+        "url": "https://www.coopernico.org/investir"
+      }
+    ],
+    "tags": [
+      "cooperative",
+      "ownership",
+      "support"
+    ],
+    "website": "https://www.coopernico.org/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-sanjotec",
+    "name": "SANJOTEC",
+    "country": "Portugal",
+    "location": "São João da Madeira",
+    "category": "Local sharing",
+    "status": "Reported operational",
+    "summary": "A technology-park solar community with Cleanwatts, combining rooftop panels and parking canopies with local energy sharing.",
+    "evidence": "SANJOTEC’s 15 August 2026 announcement reports operation and the installed capacity. The annual production and own-use split (see the case study below) are organiser estimates.",
+    "lesson": "A host site with daytime consumption can anchor sharing with nearby participants.",
+    "unknowns": "Measured yearly production, realised savings, legal registration and current joining availability require confirmation.",
+    "sources": [
+      {
+        "label": "SANJOTEC: operation and recruitment announcement",
+        "url": "https://www.sanjotec.com/pt/noticias/sanjotec/sanjotec-e-cleanwatts-procuram-membros-para-comunidade-de-energia"
+      }
+    ],
+    "website": "https://www.sanjotec.com/pt/noticias/sanjotec/sanjotec-e-cleanwatts-procuram-membros-para-comunidade-de-energia",
+    "tags": [
+      "solar",
+      "Cleanwatts",
+      "carports",
+      "CER"
+    ],
+    "source_published_at": "2026-08-15",
+    "capacity_kwp": 271.8,
+    "annual_generation_mwh": 312,
+    "annual_generation_basis": "organiser estimate",
+    "own_use_share_percent": 74,
+    "own_use_share_basis": "organiser estimate",
+    "checked_at": "2026-10-12",
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-aia",
+    "name": "Autódromo Internacional do Algarve",
+    "country": "Portugal",
+    "location": "Portimão, Algarve",
+    "category": "Local sharing",
+    "status": "Provider-reported project",
+    "summary": "A large rooftop solar project at the Algarve motorsport complex, presented by SES Energia as an energy community.",
+    "evidence": "SES’s 27 August 2025 case study reports more than 1,151 kWp and local sharing. This differs from the research report’s approximate 1 MW figure.",
+    "lesson": "A substantial host can anchor generation, but local participation and governance still need evidence.",
+    "unknowns": "Independent operating data, member governance, registration and realised savings have not been established.",
+    "sources": [
+      {
+        "label": "SES Energia: AIA case study",
+        "url": "https://sesenergia.pt/pt/case-study-cer-aia-autodromo-internacional-do-algarve/"
+      }
+    ],
+    "website": "https://sesenergia.pt/pt/case-study-cer-aia-autodromo-internacional-do-algarve/",
+    "tags": [
+      "solar",
+      "SES",
+      "motorsport",
+      "CER"
+    ],
+    "source_published_at": "2025-08-27",
+    "reported_capacity_kwp_lower_bound": 1151,
+    "checked_at": "2026-10-12",
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-vila-verde",
+    "name": "Adega Cultural de Vila Verde",
+    "country": "Portugal",
+    "location": "Vila Verde, Braga",
+    "category": "Local sharing",
+    "status": "Reported pilot operation",
+    "summary": "A rural photovoltaic energy-sharing pilot at a municipal cultural venue, documented by CIM Cávado.",
+    "evidence": "The intermunicipal authority says the pilot is already functioning and describes generation, consumption and sharing.",
+    "lesson": "Local public institutions can provide a site and coordination for a rural demonstration.",
+    "unknowns": "Capacity, measured outcomes, legal registration and current membership are undisclosed in the reviewed page.",
+    "sources": [
+      {
+        "label": "CIM Cávado: pilot in operation",
+        "url": "https://www.cimcavado.pt/en/projeto-piloto-de-constituicao-de-comunidade-energetica-ja-em-funcionamento-em-vila-verde/"
+      }
+    ],
+    "website": "https://www.cimcavado.pt/en/projeto-piloto-de-constituicao-de-comunidade-energetica-ja-em-funcionamento-em-vila-verde/",
+    "tags": [
+      "solar",
+      "municipal",
+      "pilot",
+      "rural"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-miranda",
+    "name": "Miranda do Douro",
+    "country": "Portugal",
+    "location": "Miranda do Douro",
+    "category": "Local sharing",
+    "status": "Provider-reported project",
+    "summary": "A community project associated with the local Santa Casa da Misericórdia and Cleanwatts.",
+    "evidence": "Cleanwatts reports establishing a community in August 2021 and identifies the Santa Casa in its organisation history.",
+    "lesson": "Social institutions can host generation and help connect a project to local needs.",
+    "unknowns": "Present operational status, capacity, energy output, member numbers and formal registration have not been independently verified.",
+    "sources": [
+      {
+        "label": "Cleanwatts: reported community history",
+        "url": "https://www.cleanwatts.energy/"
+      },
+      {
+        "label": "Cleanwatts: organisation and project context",
+        "url": "https://cleanwatts.energy/sobre-nos/"
+      }
+    ],
+    "website": "https://www.cleanwatts.energy/",
+    "tags": [
+      "solar",
+      "social institution",
+      "Cleanwatts"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "es-somenergia",
+    "name": "Som Energia",
+    "country": "Spain",
+    "location": "Spain",
+    "category": "Cooperative",
+    "status": "Reported active",
+    "summary": "A member-based renewable-energy cooperative combining electricity supply and generation projects.",
+    "evidence": "The cooperative publishes its supply, production and participation model. Included as a European example, without asserting Portuguese eligibility.",
+    "lesson": "Look at member participation and governance alongside the technical system.",
+    "unknowns": "Eligibility and availability vary by local project. This entry does not establish REC/CEC status under a particular national scheme.",
+    "sources": [
+      {
+        "label": "Som Energia: cooperative and services",
+        "url": "https://www.somenergia.coop/es"
+      }
+    ],
+    "tags": [
+      "cooperative",
+      "governance"
+    ],
+    "website": "https://www.somenergia.coop/es",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "be-ecopower",
+    "name": "Ecopower",
+    "country": "Belgium",
+    "location": "Flanders",
+    "category": "Cooperative",
+    "status": "Reported active",
+    "summary": "A citizen-owned cooperative investing in renewable generation and supplying electricity to its members.",
+    "evidence": "The organisation describes cooperative ownership of wind, solar, batteries and heat networks. This is organisation-reported activity.",
+    "lesson": "Long-term ownership and supply can reinforce one another within a cooperative.",
+    "unknowns": "This is not a local Portuguese ACC template. Current membership conditions and project-level outcomes require direct review.",
+    "sources": [
+      {
+        "label": "Ecopower: ownership and energy model",
+        "url": "https://ecopower.be/"
+      }
+    ],
+    "tags": [
+      "cooperative",
+      "wind",
+      "solar"
+    ],
+    "website": "https://ecopower.be/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  }
+]

@@ -1,0 +1,246 @@
+[
+  {
+    "id": "open-rec",
+    "name": "OpenREC",
+    "country": "Portugal",
+    "category": "Flexible-load coordination",
+    "status": "Prototype",
+    "summary": "Open-source one-home prototype connecting solar forecasts, OMIE prices, OpenADR events and Home Assistant.",
+    "evidence": "Capabilities and limits are documented in the project README. Local device automations remain in Home Assistant.",
+    "unknowns": "Community onboarding, E-Redes imports, member statements and coefficient export are roadmap work. Real-device operation still needs a live audit.",
+    "model": "Open source · Apache-2.0",
+    "sources": [
+      {
+        "label": "OpenREC README and roadmap",
+        "url": "https://github.com/icarusrex/open-rec#readme"
+      }
+    ],
+    "website": "https://github.com/icarusrex/open-rec",
+    "tags": [
+      "open source",
+      "OpenADR",
+      "solar"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "openleadr-rs",
+    "name": "openleadr-rs",
+    "country": "International",
+    "category": "Protocol implementation",
+    "status": "Documented implementation",
+    "summary": "Rust VTN server and VEN client library for OpenADR. An integration component for demand-response systems.",
+    "evidence": "The current upstream README documents OpenADR 3.1 from version 0.2; earlier versions implement 3.0. Version compatibility matters.",
+    "unknowns": "No independent certification claim is made here. This component does not supply community governance or settlement.",
+    "model": "Open source · MIT / Apache-2.0",
+    "sources": [
+      {
+        "label": "openleadr-rs repository",
+        "url": "https://github.com/OpenLEADR/openleadr-rs"
+      }
+    ],
+    "website": "https://github.com/OpenLEADR/openleadr-rs",
+    "tags": [
+      "OpenADR",
+      "Rust",
+      "VTN",
+      "VEN",
+      "open source"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "openleadr-python",
+    "name": "OpenLEADR Python",
+    "country": "International",
+    "category": "Protocol implementation",
+    "status": "Documented implementation",
+    "summary": "A Python implementation of OpenADR 2.0b for integrating demand-response clients and servers.",
+    "evidence": "The upstream repository describes its OpenADR 2.0b scope. This differs from the OpenADR 3 family used by OpenREC.",
+    "unknowns": "Production suitability and certification must be established for the exact deployment and version.",
+    "model": "Open source · Apache-2.0",
+    "sources": [
+      {
+        "label": "OpenLEADR Python repository",
+        "url": "https://github.com/OpenLEADR/openleadr-python"
+      }
+    ],
+    "website": "https://github.com/OpenLEADR/openleadr-python",
+    "tags": [
+      "OpenADR",
+      "Python",
+      "open source"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "home-assistant",
+    "name": "Home Assistant",
+    "country": "International",
+    "category": "Home automation",
+    "status": "Documented platform",
+    "summary": "Local home automation for connecting devices, sensors and household energy automations.",
+    "evidence": "The official project documents home automation and energy management. OpenREC uses it for household readings and local device decisions.",
+    "unknowns": "Supported devices depend on integrations. Community billing and legal registration require other arrangements.",
+    "model": "Open source · local deployment",
+    "sources": [
+      {
+        "label": "Home Assistant official site",
+        "url": "https://www.home-assistant.io/"
+      },
+      {
+        "label": "OpenREC integration example",
+        "url": "https://github.com/icarusrex/open-rec/tree/main/examples/homeassistant"
+      }
+    ],
+    "website": "https://www.home-assistant.io/",
+    "tags": [
+      "devices",
+      "automation",
+      "open source"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "cleanwatts",
+    "name": "Cleanwatts",
+    "country": "Portugal",
+    "category": "Community services",
+    "status": "Provider-reported",
+    "summary": "Commercial energy-community services with a Portuguese community-participation offering.",
+    "evidence": "The provider publishes a page for joining its energy communities. Scope and availability need confirmation for each location.",
+    "unknowns": "Pricing, ownership, contracts, availability and product-level protocol certification have not been verified.",
+    "model": "Commercial · request project terms",
+    "sources": [
+      {
+        "label": "Cleanwatts: energy communities",
+        "url": "https://cleanwatts.energy/comunidades-energia-cleanwatts/"
+      }
+    ],
+    "website": "https://cleanwatts.energy/comunidades-energia-cleanwatts/",
+    "tags": [
+      "commercial",
+      "services",
+      "sharing"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "neoom-kluub",
+    "name": "neoom KLUUB",
+    "country": "Austria",
+    "category": "Community services",
+    "status": "Provider-reported",
+    "summary": "A commercial app offering for forming and joining energy-sharing communities, with an Austrian community route.",
+    "evidence": "The provider documents KLUUB membership and initiation. The Austrian model needs its own national rules and network arrangements.",
+    "unknowns": "Portugal support and comparable total project costs have not been verified. No certification claim is made.",
+    "model": "Commercial · country-specific terms",
+    "sources": [
+      {
+        "label": "neoom: KLUUB product",
+        "url": "https://www.neoom.com/en/produkte/app/kluub"
+      },
+      {
+        "label": "neoom: Austrian communities",
+        "url": "https://www.neoom.com/loesungen-eeg"
+      }
+    ],
+    "website": "https://www.neoom.com/en/produkte/app/kluub",
+    "tags": [
+      "commercial",
+      "sharing",
+      "Austria"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "edp-bairro-solar",
+    "name": "EDP Bairro Solar",
+    "country": "Portugal",
+    "category": "Community services",
+    "status": "Provider-reported",
+    "summary": "A commercial collective self-consumption offering connecting a solar-producing host with nearby participants.",
+    "evidence": "EDP publishes the Bairro Solar offering and an internal collective self-consumption regulation. This is the verified product name, rather than the report’s Autoconsumo Pro label.",
+    "unknowns": "Compare current contract terms, charges, supplier conditions, eligibility and host/participant roles before joining.",
+    "model": "Commercial · product-specific contract terms",
+    "sources": [
+      {
+        "label": "EDP: Bairro Solar",
+        "url": "https://www.edp.pt/bairro-solar/"
+      }
+    ],
+    "website": "https://www.edp.pt/bairro-solar/",
+    "tags": [
+      "commercial",
+      "ACC",
+      "solar"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "ses-energia",
+    "name": "SES Energia",
+    "country": "Portugal",
+    "category": "Community services",
+    "status": "Provider-reported",
+    "summary": "Commercial development and management of solar energy-community projects, with published Portuguese case studies.",
+    "evidence": "SES describes its installation and ongoing community-management service and publishes its AIA project account.",
+    "unknowns": "Prices, contractual ownership, eligibility, technical integrations and independent project outcomes need direct verification.",
+    "model": "Commercial · request project terms",
+    "sources": [
+      {
+        "label": "SES: community services",
+        "url": "https://sesenergia.pt/pt/comunidades-de-energia-1315/"
+      }
+    ],
+    "website": "https://sesenergia.pt/pt/comunidades-de-energia-1315/",
+    "tags": [
+      "commercial",
+      "solar",
+      "management"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "coopernico-advice",
+    "name": "Coopérnico community support",
+    "country": "Portugal",
+    "category": "Community development",
+    "status": "Organisation-reported",
+    "summary": "Citizen-energy community development and technical-assistance initiatives from a Portuguese cooperative.",
+    "evidence": "The cooperative’s innovation page identifies community-development and assistance projects.",
+    "unknowns": "Service scope, availability, fees and funding eligibility need direct confirmation. Free services for every member are not established.",
+    "model": "Cooperative · confirm service terms",
+    "sources": [
+      {
+        "label": "Coopérnico: community development",
+        "url": "https://www.coopernico.org/inovacao"
+      }
+    ],
+    "website": "https://www.coopernico.org/inovacao",
+    "tags": [
+      "cooperative",
+      "support",
+      "advice"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  }
+]
