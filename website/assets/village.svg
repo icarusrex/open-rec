@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="540" viewBox="0 0 640 540" fill="none">
+<defs><linearGradient id="land" x1="80" y1="420" x2="530" y2="280" gradientUnits="userSpaceOnUse"><stop stop-color="#22352b"/><stop offset="1" stop-color="#344638"/></linearGradient><pattern id="panels" width="17" height="14" patternUnits="userSpaceOnUse" patternTransform="skewX(-28)"><rect width="17" height="14" fill="#1b353b"/><path d="M0 0h17v14H0z" stroke="#739d9b" stroke-width=".6"/></pattern><filter id="soft"><feGaussianBlur stdDeviation="15"/></filter></defs>
+<circle cx="405" cy="165" r="139" stroke="#324133" stroke-width=".8"/><circle cx="405" cy="165" r="165" stroke="#26332a" stroke-width=".8"/><circle cx="405" cy="165" r="190" stroke="#222d24" stroke-width=".8"/>
+<circle cx="438" cy="123" r="74" fill="#edbc54" opacity=".05" filter="url(#soft)"/><circle cx="438" cy="123" r="49" fill="#edbc54"/><path d="M438 52V41m0 164v-11m-71-71h-11m164 0h-11M388 73l-8-8m116 116-8-8m0-100 8-8M388 173l-8 8" stroke="#edbc54" stroke-width="1.4" opacity=".65"/>
+<path d="M37 365 294 215 611 373 355 522Z" fill="url(#land)" stroke="#445b47"/>
+<path d="m37 365 318 159v13L37 378z" fill="#17291f"/><path d="m355 524 256-151v12L355 537z" fill="#263b2e"/>
+<path d="m100 404 199-117 251 125M76 349l234 117 194-116M253 259l-51 30 239 120" stroke="#71866b" stroke-width="1" opacity=".3"/>
+<path d="m69 361 280 143 220-128" stroke="#53684f" stroke-width="17"/><path d="m69 361 280 143 220-128" stroke="#97a087" stroke-width=".8" stroke-dasharray="6 12"/>
+<path d="m294 246-67 39 283 140" stroke="#53684f" stroke-width="13"/><path d="m294 246-67 39 283 140" stroke="#97a087" stroke-width=".8" stroke-dasharray="6 12"/>
+<!-- upper home -->
+<path d="m262 258 85-48 66 35-85 50Z" fill="#262c24" opacity=".7"/>
+<path d="m270 229 71-41 61 33v66l-71 42-61-33Z" fill="#c9c6ab"/>
+<path d="m331 263 71-42v66l-71 42Z" fill="#889782"/><path d="m270 229 61 34v66l-61-33Z" fill="#dbd3b7"/>
+<path d="m257 225 76-63 82 51-77 49Z" fill="#91744b" stroke="#b69562"/>
+<path d="m269 222 64-48 61 39-62 37Z" fill="url(#panels)" stroke="#769798"/>
+<path d="m278 251 16 9v24l-16-9zm31 17 15 8v24l-15-8z" fill="#435950"/>
+<path d="m348 267 13-8v23l-13 8zm26-15 13-8v23l-13 8z" fill="#334b43"/><path d="m343 294 18-10v29l-18 11Z" fill="#4c604e"/>
+<!-- right civic building -->
+<path d="m425 367 102-60 55 29-103 63Z" fill="#1d2920" opacity=".7"/>
+<path d="m418 291 91-54 65 35v89l-91 54-65-34Z" fill="#c6c9b7"/><path d="m483 326 91-54v89l-91 54Z" fill="#92a58f"/>
+<path d="m407 292 54-69 62 32 63 19-99 59Z" fill="#666e5c" stroke="#8a9580"/>
+<path d="m430 288 41-48 39 21-45 48Z" fill="url(#panels)" stroke="#769798"/><path d="m483 314 31-39 46 3-67 41Z" fill="url(#panels)" stroke="#769798"/>
+<path d="m430 318 16 8v23l-16-8zm31 16 14 8v23l-14-7z" fill="#566e5b"/>
+<path d="m499 334 15-9v23l-15 9zm29-18 15-8v23l-15 9zm29-16 9-5v23l-9 5Z" fill="#3f5a4c"/>
+<path d="m502 365 21-12v34l-21 12Z" fill="#4b6353"/><path d="m499 399 29-17 8 5-30 18Z" fill="#acb39c"/>
+<!-- front home -->
+<path d="m206 452 102-59 74 37-102 60Z" fill="#1a2a20" opacity=".6"/>
+<path d="m205 358 84-49 76 40v77l-84 48-76-40Z" fill="#b5c6b4"/><path d="m281 398 84-49v77l-84 48Z" fill="#829c84"/><path d="m205 358 76 40v76l-76-40Z" fill="#d8d4b9"/>
+<path d="m192 357 79-73 105 58-88 58Z" fill="#b98d4e" stroke="#d8ab62"/>
+<path d="m205 354 68-57 83 46-73 45Z" fill="url(#panels)" stroke="#83ada9"/>
+<path d="m217 380 17 9v27l-17-9zm34 19 17 9v27l-17-9Z" fill="#485f51"/>
+<path d="m299 402 17-10v26l-17 10zm33-19 17-10v26l-17 10Z" fill="#375546"/><path d="m295 436 19-11v30l-19 11Z" fill="#52674d"/>
+<!-- small left home -->
+<path d="m82 333 55-32 60 30-56 33Z" fill="#1a2b20" opacity=".7"/>
+<path d="m82 280 54-32 51 28v61l-54 32-51-28Z" fill="#c2c6ad"/><path d="m133 308 54-32v61l-54 32Z" fill="#7f9681"/>
+<path d="m72 279 52-53 76 43-64 40Z" fill="#86734c" stroke="#b2a06d"/>
+<path d="m87 278 40-40 57 31-49 30Z" fill="url(#panels)" stroke="#729897"/>
+<path d="m94 303 13 7v20l-13-7zm25 14 10 5v20l-10-5Z" fill="#4d6454"/><path d="m147 310 13-8v21l-13 8zm-1 32 13-8v20l-13 8Z" fill="#3e5949"/>
+<!-- trees and garden -->
+<path d="M192 279v42m198-19v49M94 373v32m335 41v39" stroke="#7c8c68" stroke-width="4"/>
+<path d="M192 259c-19 0-28 20-22 37 4 12 38 12 43 0 8-15-1-37-21-37Z" fill="#50785b"/><path d="M390 280c-23 0-32 20-23 39 7 15 42 14 48-1 7-19-3-38-25-38Z" fill="#618262"/>
+<path d="M94 355c-19 0-28 21-21 33 7 12 37 12 43 0 8-14-3-33-22-33Z" fill="#72946d"/><path d="M429 431c-20 0-31 21-23 39 6 13 39 14 45 0 8-17-1-39-22-39Z" fill="#608366"/>
+<path d="m377 397 32-18 17 9-32 19Z" fill="#537952"/><path d="m380 394 28-15m-20 20 29-16" stroke="#93ad78" stroke-width="3"/>
+<path d="m160 397 24-14 17 9-24 14Z" fill="#5d7d50"/><path d="m164 395 18-11m-10 15 20-11" stroke="#92ad79" stroke-width="2"/>
+<!-- shared energy connections, schematic rather than physical wiring -->
+<path d="m173 333 43 24m110-36 102 38m-61 74 66-38" stroke="#edbc54" stroke-width="1.5" stroke-dasharray="4 6" opacity=".8"/>
+<circle cx="216" cy="357" r="4" fill="#edbc54"/><circle cx="326" cy="321" r="4" fill="#edbc54"/><circle cx="428" cy="359" r="4" fill="#edbc54"/>
+<path d="M228 160h50m-43 9h34M503 195h42m-35 9h26" stroke="#53735d" stroke-width="1"/>
+<circle cx="204" cy="206" r="2" fill="#86bbaa"/><circle cx="530" cy="180" r="2" fill="#86bbaa"/>
+</svg>
