@@ -1,0 +1,115 @@
+[
+  {
+    "id": "dgeg",
+    "name": "DGEG self-consumption & CER portal",
+    "category": "Registration",
+    "summary": "Official registration procedures, licensing guidance, equipment information and the applicable legal framework.",
+    "sources": [
+      {
+        "label": "DGEG",
+        "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "erse",
+    "name": "ERSE self-consumption guidance",
+    "category": "Regulation",
+    "summary": "Rules and guidance on commercial relationships, metering, sharing and network charges.",
+    "source_updated_at": "2025-09-08",
+    "sources": [
+      {
+        "label": "ERSE",
+        "url": "https://www.erse.pt/atividade/regulamentos-eletricidade/autoconsumo/"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null
+  },
+  {
+    "id": "eredes",
+    "name": "E-Redes collective self-consumption",
+    "category": "Network procedures",
+    "summary": "The network operator’s process from appointing an EGAC to metering, certification and data access.",
+    "sources": [
+      {
+        "label": "E-Redes process guide",
+        "url": "https://www.e-redes.pt/sites/eredes/files/2024-08/E-redes_autoconsumocoletivo.pdf"
+      },
+      {
+        "label": "EGAC responsibilities",
+        "url": "https://www.e-redes.pt/pt-pt/entidade-gestora-do-autoconsumo-coletivo-egac"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "ceah-map",
+    "name": "Citizen Energy Advisory Hub map",
+    "category": "European directory",
+    "summary": "Commission-backed map with REC/CEC verification criteria. Coverage is incomplete; follow the original map for its full dataset.",
+    "sources": [
+      {
+        "label": "Explore the original map",
+        "url": "https://citizens-energy.ec.europa.eu/knowledge-hub/map-citizen-energy-projects_en"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "rescoop",
+    "name": "REScoop transposition tracker",
+    "category": "European policy",
+    "summary": "A comparison of national energy-community definitions and enabling frameworks. Check each country’s own update date.",
+    "sources": [
+      {
+        "label": "REScoop tracker",
+        "url": "https://www.rescoop.eu/transposition-tracker"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "facility",
+    "name": "Energy Communities Facility",
+    "category": "Funding & assistance",
+    "summary": "European business-plan support and country frameworks. Follow the official calls page for eligibility and application dates; no open deadline is asserted here.",
+    "sources": [
+      {
+        "label": "Official programme",
+        "url": "https://energycommunitiesfacility.eu/"
+      },
+      {
+        "label": "National frameworks",
+        "url": "https://energycommunitiesfacility.eu/resources/national-policy-frameworks"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "coopernico-support",
+    "name": "Coopérnico community support",
+    "category": "Local assistance",
+    "summary": "A Portuguese starting point for citizen-energy projects and technical-assistance initiatives. Confirm the service and eligibility directly.",
+    "sources": [
+      {
+        "label": "Coopérnico innovation and assistance",
+        "url": "https://www.coopernico.org/inovacao"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  }
+]

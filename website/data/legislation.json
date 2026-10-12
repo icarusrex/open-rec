@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pt-dl-15-2022",
+    "name": "Decreto-Lei n.º 15/2022",
+    "country": "Portugal",
+    "category": "Legal framework",
+    "status": "Adopted baseline",
+    "date": "2022-01-14",
+    "summary": "Foundational electricity-system legislation containing the Portuguese self-consumption and energy-community framework.",
+    "evidence": "Original act: self-consumption provisions and articles 189–191 on CER and CCE.",
+    "unknowns": "The original act is a baseline. Consult the consolidated text and subsequent amendments before applying a provision.",
+    "sources": [
+      {
+        "label": "Diário da República: original act",
+        "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/15-2022-177634016"
+      },
+      {
+        "label": "DGEG: applicable framework",
+        "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/"
+      }
+    ],
+    "tags": [
+      "ACC",
+      "CER",
+      "CCE",
+      "DGEG"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-rac-815-2023",
+    "name": "Regulamento n.º 815/2023",
+    "country": "Portugal",
+    "category": "Regulation",
+    "status": "Adopted baseline",
+    "date": "2023-07-27",
+    "summary": "ERSE’s Regulamento do Autoconsumo covers commercial relationships, metering, data and sharing arrangements.",
+    "evidence": "The official act approved the RAC and repealed Regulamento n.º 373/2021. ERSE links it from its self-consumption page.",
+    "unknowns": "Available sharing modes and the operational process must be confirmed with the network operator for each project.",
+    "sources": [
+      {
+        "label": "Diário da República: RAC",
+        "url": "https://diariodarepublica.pt/dr/detalhe/regulamento/815-2023-216251911"
+      },
+      {
+        "label": "ERSE: regulation and guidance",
+        "url": "https://www.erse.pt/atividade/regulamentos-eletricidade/autoconsumo/"
+      }
+    ],
+    "tags": [
+      "RAC",
+      "metering",
+      "sharing",
+      "EGAC"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-eredes-data-2026",
+    "name": "E-Redes: EGAC data guide",
+    "country": "Portugal",
+    "category": "Operational guidance",
+    "status": "Published guidance",
+    "date": "2026-01-01",
+    "date_precision": "month",
+    "summary": "January 2026 guidance describes sFTP data provision and distinguishes fixed/proportional sharing from dynamic/hierarchical schedules.",
+    "evidence": "The document is network-operator guidance, rather than a legislative amendment. The month comes from the document version.",
+    "unknowns": "Confirm the applicable data service, authorisations and file format for the specific community.",
+    "sources": [
+      {
+        "label": "E-Redes: January 2026 guide",
+        "url": "https://www.e-redes.pt/sites/eredes/files/2026-01/Autoconsumo%20Coletivo%20-%20Disponibiliza%C3%A7%C3%A3o%20EGAC%20vJan2026%202.pdf"
+      }
+    ],
+    "tags": [
+      "sFTP",
+      "EGAC",
+      "data"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "eu-rec-definition",
+    "name": "Renewable Energy Directive",
+    "country": "European Union",
+    "category": "EU foundation",
+    "status": "Directive baseline",
+    "date": "2018-12-11",
+    "summary": "Directive (EU) 2018/2001 provides the renewable-energy-community definition and enabling framework.",
+    "evidence": "Article 2(16) defines RECs and article 22 addresses their framework. National implementation determines practical pathways.",
+    "unknowns": "Use the latest consolidated directive and the national implementation together. This record is not an amendment monitor.",
+    "sources": [
+      {
+        "label": "EUR-Lex: Directive (EU) 2018/2001",
+        "url": "https://eur-lex.europa.eu/eli/dir/2018/2001/oj"
+      },
+      {
+        "label": "Commission: map criteria",
+        "url": "https://citizens-energy.ec.europa.eu/knowledge-hub/map-citizen-energy-projects_en"
+      }
+    ],
+    "tags": [
+      "REC",
+      "EU",
+      "governance"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "eu-cec-definition",
+    "name": "Electricity Market Directive",
+    "country": "European Union",
+    "category": "EU foundation",
+    "status": "Directive baseline",
+    "date": "2019-06-05",
+    "summary": "Directive (EU) 2019/944 provides the citizen-energy-community definition and framework.",
+    "evidence": "Article 2(11) defines CECs; article 16 sets their framework. CEC and REC definitions have different scopes.",
+    "unknowns": "Review amendments and national implementation. An EU definition does not itself confirm project eligibility.",
+    "sources": [
+      {
+        "label": "EUR-Lex: Directive (EU) 2019/944",
+        "url": "https://eur-lex.europa.eu/eli/dir/2019/944/oj"
+      },
+      {
+        "label": "Commission: community definitions",
+        "url": "https://citizens-energy.ec.europa.eu/knowledge-hub/map-citizen-energy-projects_en"
+      }
+    ],
+    "tags": [
+      "CEC",
+      "CCE",
+      "EU"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  }
+]

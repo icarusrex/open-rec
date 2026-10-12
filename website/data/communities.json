@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pt-telheiras",
+    "name": "Telheiras / Lumiar",
+    "country": "Portugal",
+    "location": "Lisboa",
+    "category": "Local sharing",
+    "status": "Reported operational",
+    "summary": "A neighbourhood solar community promoted by Viver Telheiras and the Lumiar parish council, with vulnerable households included.",
+    "evidence": "The organiser reports two production units and 70 members on its community page. This is an organiser report, not an independent outcome audit.",
+    "lesson": "Build participation and advice around a local organisation people already know.",
+    "unknowns": "Audited savings, current joining availability and registration documents have not been verified.",
+    "sources": [
+      {
+        "label": "Viver Telheiras: community and participation",
+        "url": "https://vivertelheiras.pt/certelheiras/"
+      }
+    ],
+    "tags": [
+      "solar",
+      "inclusion",
+      "CER",
+      "Lisbon"
+    ],
+    "website": "https://vivertelheiras.pt/certelheiras/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-agra-amial",
+    "name": "Agra do Amial",
+    "country": "Portugal",
+    "location": "Porto",
+    "category": "Local sharing",
+    "status": "Reported operational",
+    "summary": "A solar energy community involving municipal housing and a local school, developed through Asprela + Sustentável.",
+    "evidence": "The municipality describes the community as an ERSE pilot. Porto’s 2024 sustainability report says it began operating in May 2024.",
+    "lesson": "Municipal buildings and housing can anchor a community with a social purpose.",
+    "unknowns": "Current membership, independently measured savings and open participation have not been verified.",
+    "sources": [
+      {
+        "label": "Porto: community project",
+        "url": "https://naturebasedsolutions.porto.pt/nbs/comunidade-energetica-do-bairro-da-agra-do-amial/"
+      },
+      {
+        "label": "Porto: 2024 sustainability report",
+        "url": "https://www.cm-porto.pt/files/uploads/cms/Relatorio_Desenvolvimento_Sustentavel_2024_Porto_Futuro_PT.pdf"
+      }
+    ],
+    "tags": [
+      "solar",
+      "municipal",
+      "CER",
+      "social housing"
+    ],
+    "website": "https://asprelamaissustentavel.pt/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-coopernico",
+    "name": "Coopérnico",
+    "country": "Portugal",
+    "location": "Portugal mainland",
+    "category": "Cooperative",
+    "status": "Reported active",
+    "summary": "A Portuguese renewable-energy cooperative with citizen investment, electricity supply and community-development support.",
+    "evidence": "Its website documents membership, supply and renewable-generation investment. A nationwide cooperative is a different model from a single local sharing group.",
+    "lesson": "Cooperative ownership can connect member capital to renewable generation.",
+    "unknowns": "Legal CER/CCE classification of individual projects must be checked separately. Member benefits depend on the service or project.",
+    "sources": [
+      {
+        "label": "Coopérnico: membership and services",
+        "url": "https://www.coopernico.org/"
+      },
+      {
+        "label": "Coopérnico: investment model",
+        "url": "https://www.coopernico.org/investir"
+      }
+    ],
+    "tags": [
+      "cooperative",
+      "ownership",
+      "support"
+    ],
+    "website": "https://www.coopernico.org/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "es-somenergia",
+    "name": "Som Energia",
+    "country": "Spain",
+    "location": "Spain",
+    "category": "Cooperative",
+    "status": "Reported active",
+    "summary": "A member-based renewable-energy cooperative combining electricity supply and generation projects.",
+    "evidence": "The cooperative publishes its supply, production and participation model. Included as a European example, without asserting Portuguese eligibility.",
+    "lesson": "Look at member participation and governance alongside the technical system.",
+    "unknowns": "Eligibility and availability vary by local project. This entry does not establish REC/CEC status under a particular national scheme.",
+    "sources": [
+      {
+        "label": "Som Energia: cooperative and services",
+        "url": "https://www.somenergia.coop/es"
+      }
+    ],
+    "tags": [
+      "cooperative",
+      "governance"
+    ],
+    "website": "https://www.somenergia.coop/es",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "be-ecopower",
+    "name": "Ecopower",
+    "country": "Belgium",
+    "location": "Flanders",
+    "category": "Cooperative",
+    "status": "Reported active",
+    "summary": "A citizen-owned cooperative investing in renewable generation and supplying electricity to its members.",
+    "evidence": "The organisation describes cooperative ownership of wind, solar, batteries and heat networks. This is organisation-reported activity.",
+    "lesson": "Long-term ownership and supply can reinforce one another within a cooperative.",
+    "unknowns": "This is not a local Portuguese ACC template. Current membership conditions and project-level outcomes require direct review.",
+    "sources": [
+      {
+        "label": "Ecopower: ownership and energy model",
+        "url": "https://ecopower.be/"
+      }
+    ],
+    "tags": [
+      "cooperative",
+      "wind",
+      "solar"
+    ],
+    "website": "https://ecopower.be/",
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  }
+]
