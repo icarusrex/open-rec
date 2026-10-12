@@ -164,5 +164,83 @@
     "checked_at": "2026-10-12",
     "source_published_at": null,
     "source_updated_at": null
+  },
+  {
+    "id": "edp-bairro-solar",
+    "name": "EDP Bairro Solar",
+    "country": "Portugal",
+    "category": "Community services",
+    "status": "Provider-reported",
+    "summary": "A commercial collective self-consumption offering connecting a solar-producing host with nearby participants.",
+    "evidence": "EDP publishes the Bairro Solar offering and an internal collective self-consumption regulation. This is the verified product name, rather than the report’s Autoconsumo Pro label.",
+    "unknowns": "Compare current contract terms, charges, supplier conditions, eligibility and host/participant roles before joining.",
+    "model": "Commercial · product-specific contract terms",
+    "sources": [
+      {
+        "label": "EDP: Bairro Solar",
+        "url": "https://www.edp.pt/bairro-solar/"
+      }
+    ],
+    "website": "https://www.edp.pt/bairro-solar/",
+    "tags": [
+      "commercial",
+      "ACC",
+      "solar"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "ses-energia",
+    "name": "SES Energia",
+    "country": "Portugal",
+    "category": "Community services",
+    "status": "Provider-reported",
+    "summary": "Commercial development and management of solar energy-community projects, with published Portuguese case studies.",
+    "evidence": "SES describes its installation and ongoing community-management service and publishes its AIA project account.",
+    "unknowns": "Prices, contractual ownership, eligibility, technical integrations and independent project outcomes need direct verification.",
+    "model": "Commercial · request project terms",
+    "sources": [
+      {
+        "label": "SES: community services",
+        "url": "https://sesenergia.pt/pt/comunidades-de-energia-1315/"
+      }
+    ],
+    "website": "https://sesenergia.pt/pt/comunidades-de-energia-1315/",
+    "tags": [
+      "commercial",
+      "solar",
+      "management"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "coopernico-advice",
+    "name": "Coopérnico community support",
+    "country": "Portugal",
+    "category": "Community development",
+    "status": "Organisation-reported",
+    "summary": "Citizen-energy community development and technical-assistance initiatives from a Portuguese cooperative.",
+    "evidence": "The cooperative’s innovation page identifies community-development and assistance projects.",
+    "unknowns": "Service scope, availability, fees and funding eligibility need direct confirmation. Free services for every member are not established.",
+    "model": "Cooperative · confirm service terms",
+    "sources": [
+      {
+        "label": "Coopérnico: community development",
+        "url": "https://www.coopernico.org/inovacao"
+      }
+    ],
+    "website": "https://www.coopernico.org/inovacao",
+    "tags": [
+      "cooperative",
+      "support",
+      "advice"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
   }
 ]

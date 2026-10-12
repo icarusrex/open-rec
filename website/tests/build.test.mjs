@@ -41,7 +41,7 @@ test('every generated local link and asset exists, including source downloads', 
 });
 
 test('all dataset records have unique identities, real dates and safe primary-source links', async () => {
-  for(const name of ['communities','tools','legislation','resources','checklist']) {
+  for(const name of ['communities','tools','legislation','resources','checklist','case-studies']) {
     const data=JSON.parse(await readFile(path.join(root,'data',name+'.json'),'utf8'));
     assert.equal(new Set(data.map(r=>r.id)).size,data.length);
     for(const r of data) {

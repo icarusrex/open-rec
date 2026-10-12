@@ -1,5 +1,36 @@
 [
   {
+    "id": "pt-dl-130-2026",
+    "name": "Decreto-Lei n.º 130/2026",
+    "country": "Portugal",
+    "category": "Legal amendment",
+    "status": "Adopted amendment",
+    "date": "2026-06-29",
+    "summary": "Amends the electricity framework, including ACC principles, proximity, internal rules and DGEG information duties.",
+    "evidence": "Articles 83, 86, 86-A and 90 are relevant. Article 10 specifies commencement 60 days after publication; article 9 limits application to new prior-control procedures.",
+    "unknowns": "Map and voluntary-contract duties do not prove those services are available. Confirm transitional application and current implementing rules.",
+    "sources": [
+      {
+        "label": "Diário da República: 2026 amendment",
+        "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/130-2026-1139897687"
+      },
+      {
+        "label": "DGEG: current ACC procedures",
+        "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/5-autoconsumo-coletivo-e-cer/"
+      }
+    ],
+    "tags": [
+      "2026",
+      "ACC",
+      "CER",
+      "proximity",
+      "governance"
+    ],
+    "source_published_at": "2026-06-29",
+    "checked_at": "2026-10-12",
+    "source_updated_at": null
+  },
+  {
     "id": "pt-dl-15-2022",
     "name": "Decreto-Lei n.º 15/2022",
     "country": "Portugal",
@@ -8,7 +39,7 @@
     "date": "2022-01-14",
     "summary": "Foundational electricity-system legislation containing the Portuguese self-consumption and energy-community framework.",
     "evidence": "Original act: self-consumption provisions and articles 189–191 on CER and CCE.",
-    "unknowns": "The original act is a baseline. Consult the consolidated text and subsequent amendments before applying a provision.",
+    "unknowns": "The 2022 text has been amended, including by DL 130/2026. Use the amended/consolidated provisions and check transition rules before acting.",
     "sources": [
       {
         "label": "Diário da República: original act",
@@ -17,6 +48,10 @@
       {
         "label": "DGEG: applicable framework",
         "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/"
+      },
+      {
+        "label": "2026 amendment",
+        "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/130-2026-1139897687"
       }
     ],
     "tags": [

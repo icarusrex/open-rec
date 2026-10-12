@@ -48,4 +48,4 @@ The starter checklist stores only selected step IDs in local storage. It can be 
 - At review, record what the source actually supports, update the date, and retain explicit unknowns.
 - When a source disappears or activity cannot be established, label the uncertainty or remove the unsupported claim. Do not silently refresh the check date.
 
-Initial evidence cutoff: 12 October 2026. The supplied global-topics report did not contain OpenREC research. Launch content was reconstructed from the earlier agreed brief and primary sources; the requested larger research dataset remains an editorial expansion.
+Initial evidence cutoff: 12 October 2026. The supplied Portugal report informed the expanded launch collection after primary-source verification. Corrections and excluded claims are recorded in `docs/website-research-audit.md`. The initial unrelated attachment was not used as OpenREC evidence. A larger directory and audited operating outcomes remain editorial expansion.

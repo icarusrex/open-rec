@@ -8,6 +8,10 @@
       {
         "label": "DGEG",
         "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/"
+      },
+      {
+        "label": "DGEG: ACC/CER registration phases",
+        "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/5-autoconsumo-coletivo-e-cer/"
       }
     ],
     "checked_at": "2026-10-12",
@@ -111,5 +115,22 @@
     "checked_at": "2026-10-12",
     "source_published_at": null,
     "source_updated_at": null
+  },
+  {
+    "id": "gulbenkian-support",
+    "name": "Comunidades de Energia Gulbenkian",
+    "category": "Funding · closed call",
+    "summary": "The 2026 call supported Portuguese legal entities developing citizen-led renewable-energy projects, with awards up to €30,000. It closed on 16 September 2026; recordings and guidance remain useful.",
+    "sources": [
+      {
+        "label": "Gulbenkian: call, conditions and webinars",
+        "url": "https://gulbenkian.pt/bolsas-lista/comunidades-de-energia-gulbenkian/"
+      }
+    ],
+    "source_updated_at": "2026-09-15",
+    "application_status": "closed",
+    "deadline": "2026-09-16",
+    "checked_at": "2026-10-12",
+    "source_published_at": null
   }
 ]

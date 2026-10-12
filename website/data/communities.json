@@ -91,6 +91,127 @@
     "source_updated_at": null
   },
   {
+    "id": "pt-sanjotec",
+    "name": "SANJOTEC",
+    "country": "Portugal",
+    "location": "São João da Madeira",
+    "category": "Local sharing",
+    "status": "Reported operational",
+    "summary": "A technology-park solar community with Cleanwatts, combining rooftop panels and parking canopies with local energy sharing.",
+    "evidence": "SANJOTEC’s 15 August 2026 announcement reports operation and 271.8 kWp installed. The 312 MWh/year production and 74% own-use figures are estimates.",
+    "lesson": "A host site with daytime consumption can anchor sharing with nearby participants.",
+    "unknowns": "Measured yearly production, realised savings, legal registration and current joining availability require confirmation.",
+    "sources": [
+      {
+        "label": "SANJOTEC: operation and recruitment announcement",
+        "url": "https://www.sanjotec.com/pt/noticias/sanjotec/sanjotec-e-cleanwatts-procuram-membros-para-comunidade-de-energia"
+      }
+    ],
+    "website": "https://www.sanjotec.com/pt/noticias/sanjotec/sanjotec-e-cleanwatts-procuram-membros-para-comunidade-de-energia",
+    "tags": [
+      "solar",
+      "Cleanwatts",
+      "carports",
+      "CER"
+    ],
+    "source_published_at": "2026-08-15",
+    "capacity_kwp": 271.8,
+    "annual_generation_mwh": 312,
+    "annual_generation_basis": "organiser estimate",
+    "own_use_share_percent": 74,
+    "own_use_share_basis": "organiser estimate",
+    "checked_at": "2026-10-12",
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-aia",
+    "name": "Autódromo Internacional do Algarve",
+    "country": "Portugal",
+    "location": "Portimão, Algarve",
+    "category": "Local sharing",
+    "status": "Provider-reported project",
+    "summary": "A large rooftop solar project at the Algarve motorsport complex, presented by SES Energia as an energy community.",
+    "evidence": "SES’s 27 August 2025 case study reports more than 1,151 kWp and local sharing. This differs from the research report’s approximate 1 MW figure.",
+    "lesson": "A substantial host can anchor generation, but local participation and governance still need evidence.",
+    "unknowns": "Independent operating data, member governance, registration and realised savings have not been established.",
+    "sources": [
+      {
+        "label": "SES Energia: AIA case study",
+        "url": "https://sesenergia.pt/pt/case-study-cer-aia-autodromo-internacional-do-algarve/"
+      }
+    ],
+    "website": "https://sesenergia.pt/pt/case-study-cer-aia-autodromo-internacional-do-algarve/",
+    "tags": [
+      "solar",
+      "SES",
+      "motorsport",
+      "CER"
+    ],
+    "source_published_at": "2025-08-27",
+    "reported_capacity_kwp_lower_bound": 1151,
+    "checked_at": "2026-10-12",
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-vila-verde",
+    "name": "Adega Cultural de Vila Verde",
+    "country": "Portugal",
+    "location": "Vila Verde, Braga",
+    "category": "Local sharing",
+    "status": "Reported pilot operation",
+    "summary": "A rural photovoltaic energy-sharing pilot at a municipal cultural venue, documented by CIM Cávado.",
+    "evidence": "The intermunicipal authority says the pilot is already functioning and describes generation, consumption and sharing.",
+    "lesson": "Local public institutions can provide a site and coordination for a rural demonstration.",
+    "unknowns": "Capacity, measured outcomes, legal registration and current membership are undisclosed in the reviewed page.",
+    "sources": [
+      {
+        "label": "CIM Cávado: pilot in operation",
+        "url": "https://www.cimcavado.pt/en/projeto-piloto-de-constituicao-de-comunidade-energetica-ja-em-funcionamento-em-vila-verde/"
+      }
+    ],
+    "website": "https://www.cimcavado.pt/en/projeto-piloto-de-constituicao-de-comunidade-energetica-ja-em-funcionamento-em-vila-verde/",
+    "tags": [
+      "solar",
+      "municipal",
+      "pilot",
+      "rural"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
+    "id": "pt-miranda",
+    "name": "Miranda do Douro",
+    "country": "Portugal",
+    "location": "Miranda do Douro",
+    "category": "Local sharing",
+    "status": "Provider-reported project",
+    "summary": "A community project associated with the local Santa Casa da Misericórdia and Cleanwatts.",
+    "evidence": "Cleanwatts reports establishing a community in August 2021 and identifies the Santa Casa in its organisation history.",
+    "lesson": "Social institutions can host generation and help connect a project to local needs.",
+    "unknowns": "Present operational status, capacity, energy output, member numbers and formal registration have not been independently verified.",
+    "sources": [
+      {
+        "label": "Cleanwatts: reported community history",
+        "url": "https://www.cleanwatts.energy/"
+      },
+      {
+        "label": "Cleanwatts: organisation and project context",
+        "url": "https://cleanwatts.energy/sobre-nos/"
+      }
+    ],
+    "website": "https://www.cleanwatts.energy/",
+    "tags": [
+      "solar",
+      "social institution",
+      "Cleanwatts"
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  },
+  {
     "id": "es-somenergia",
     "name": "Som Energia",
     "country": "Spain",

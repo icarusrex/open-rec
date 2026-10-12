@@ -19,7 +19,7 @@
   {
     "id": "pathway",
     "name": "Choose the legal and sharing pathway",
-    "summary": "Distinguish an ACC arrangement from a CER or CCE legal entity. Confirm the current rules, proximity and intended activities with DGEG.",
+    "summary": "Distinguish ACC from CER/CCE entities. Confirm amended proximity rules, current eligibility and transition arrangements with DGEG.",
     "owner": "Founding group and adviser",
     "document": "Chosen pathway, proposed legal form and eligibility questions",
     "dependency": "Participant and installation list",
@@ -31,6 +31,10 @@
       {
         "label": "Original legal framework",
         "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/15-2022-177634016"
+      },
+      {
+        "label": "2026 amendment: proximity and community framework",
+        "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/130-2026-1139897687"
       }
     ],
     "checked_at": "2026-10-12",
@@ -52,6 +56,10 @@
       {
         "label": "E-Redes EGAC role",
         "url": "https://www.e-redes.pt/pt-pt/entidade-gestora-do-autoconsumo-coletivo-egac"
+      },
+      {
+        "label": "2026 amendment: internal rules and ACC principles",
+        "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/130-2026-1139897687"
       }
     ],
     "checked_at": "2026-10-12",
@@ -78,18 +86,14 @@
   {
     "id": "registration",
     "name": "Prepare the DGEG registration",
-    "summary": "Follow the official portal process, identifying participating installations and their roles. Verify the registration and licensing documents required for the project.",
+    "summary": "Use DGEG’s portal and its Registo, Cadastro and Certificação phases. Identify installations, participants and the EGAC; follow the current project-specific document requirements.",
     "owner": "EGAC and project professionals",
     "document": "Portal application and supporting installation records",
     "dependency": "Chosen pathway, participants and design",
     "sources": [
       {
-        "label": "DGEG portal procedures",
-        "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/"
-      },
-      {
-        "label": "E-Redes registration sequence",
-        "url": "https://www.e-redes.pt/sites/eredes/files/2024-08/E-redes_autoconsumocoletivo.pdf"
+        "label": "DGEG: registration phases and changes",
+        "url": "https://dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/producao-de-energia-eletrica/producao-descentralizada-autoconsumo-e-upp-mp-mn/autoconsumo-e-cer/5-autoconsumo-coletivo-e-cer/"
       }
     ],
     "checked_at": "2026-10-12",

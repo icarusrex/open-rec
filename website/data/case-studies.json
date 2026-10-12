@@ -1,0 +1,59 @@
+[
+  {
+    "id": "case-sanjotec",
+    "community_id": "pt-sanjotec",
+    "name": "SANJOTEC: a host that can share",
+    "summary": "Solar canopies and rooftops serve the technology park first, with remaining energy intended for local sharing.",
+    "outcome_basis": "Organiser estimate, not a measured annual result",
+    "metrics": [
+      {
+        "label": "Installed solar",
+        "value": "271.8",
+        "unit": "kWp",
+        "basis": "Organiser-reported installation"
+      },
+      {
+        "label": "Expected generation",
+        "value": "312",
+        "unit": "MWh/year",
+        "basis": "Organiser estimate"
+      },
+      {
+        "label": "Expected host share",
+        "value": "74",
+        "unit": "%",
+        "basis": "Share of estimated annual generation"
+      }
+    ],
+    "own_share_percent": 74,
+    "lesson": "Design around the host’s load profile, then establish transparent member terms. Annual forecasts need later comparison with actual meter data.",
+    "sources": [
+      {
+        "label": "SANJOTEC: 15 August 2026 announcement",
+        "url": "https://www.sanjotec.com/pt/noticias/sanjotec/sanjotec-e-cleanwatts-procuram-membros-para-comunidade-de-energia"
+      }
+    ],
+    "source_published_at": "2026-08-15",
+    "checked_at": "2026-10-12",
+    "source_updated_at": null
+  },
+  {
+    "id": "case-vila-verde",
+    "community_id": "pt-vila-verde",
+    "name": "Vila Verde: a public place to begin",
+    "summary": "The Adega Cultural gives a rural pilot a municipal venue for generation, consumption and sharing. CIM Cávado describes the pilot as functioning.",
+    "outcome_basis": "Public-authority project report; no measured outcome dataset disclosed",
+    "metrics": [],
+    "own_share_percent": null,
+    "lesson": "A public host and regional coordination can reduce the organising burden. Verify capacity, participant agreements and monitoring results before replicating the model.",
+    "sources": [
+      {
+        "label": "CIM Cávado: operating pilot",
+        "url": "https://www.cimcavado.pt/en/projeto-piloto-de-constituicao-de-comunidade-energetica-ja-em-funcionamento-em-vila-verde/"
+      }
+    ],
+    "checked_at": "2026-10-12",
+    "source_published_at": null,
+    "source_updated_at": null
+  }
+]
