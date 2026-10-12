@@ -4,6 +4,7 @@ import {readFile, readdir, stat} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
+import {validateRecord} from '../scripts/validate.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const build = spawnSync(process.execPath, [path.join(root,'scripts/build.mjs')], {encoding:'utf8'});
@@ -44,14 +45,6 @@ test('all dataset records have unique identities, real dates and safe primary-so
   for(const name of ['communities','tools','legislation','resources','checklist','case-studies']) {
     const data=JSON.parse(await readFile(path.join(root,'data',name+'.json'),'utf8'));
     assert.equal(new Set(data.map(r=>r.id)).size,data.length);
-    for(const r of data) {
-      assert.match(r.id,/^[a-z0-9-]+$/);
-      assert.match(r.checked_at,/^\d{4}-\d{2}-\d{2}$/);
-      assert.ok(!Number.isNaN(Date.parse(r.checked_at)));
-      assert.ok(r.sources.length>0);
-      for(const s of r.sources) assert.equal(new URL(s.url).protocol,'https:');
-      assert.ok(Object.hasOwn(r,'source_published_at'));
-      assert.ok(Object.hasOwn(r,'source_updated_at'));
-    }
+    for(const r of data) validateRecord(r, name);
   }
 });

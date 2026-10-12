@@ -28,7 +28,8 @@
     ],
     "source_published_at": "2026-06-29",
     "checked_at": "2026-10-12",
-    "source_updated_at": null
+    "source_updated_at": null,
+    "date_type": "Published"
   },
   {
     "id": "pt-dl-15-2022",
@@ -61,8 +62,9 @@
       "DGEG"
     ],
     "checked_at": "2026-10-12",
-    "source_published_at": null,
-    "source_updated_at": null
+    "source_published_at": "2022-01-14",
+    "source_updated_at": null,
+    "date_type": "Published"
   },
   {
     "id": "pt-rac-815-2023",
@@ -91,8 +93,9 @@
       "EGAC"
     ],
     "checked_at": "2026-10-12",
-    "source_published_at": null,
-    "source_updated_at": null
+    "source_published_at": "2023-07-27",
+    "source_updated_at": null,
+    "date_type": "Published"
   },
   {
     "id": "pt-eredes-data-2026",
@@ -118,7 +121,8 @@
     ],
     "checked_at": "2026-10-12",
     "source_published_at": null,
-    "source_updated_at": null
+    "source_updated_at": null,
+    "date_type": "Document version"
   },
   {
     "id": "eu-rec-definition",
@@ -129,7 +133,7 @@
     "date": "2018-12-11",
     "summary": "Directive (EU) 2018/2001 provides the renewable-energy-community definition and enabling framework.",
     "evidence": "Article 2(16) defines RECs and article 22 addresses their framework. National implementation determines practical pathways.",
-    "unknowns": "Use the latest consolidated directive and the national implementation together. This record is not an amendment monitor.",
+    "unknowns": "Amended by Directive (EU) 2023/2413 (RED III), which DL 130/2026 states it partially transposes. Use the consolidated directive and the national implementation together. This record is not an amendment monitor.",
     "sources": [
       {
         "label": "EUR-Lex: Directive (EU) 2018/2001",
@@ -138,6 +142,10 @@
       {
         "label": "Commission: map criteria",
         "url": "https://citizens-energy.ec.europa.eu/knowledge-hub/map-citizen-energy-projects_en"
+      },
+      {
+        "label": "Diário da República: DL 130/2026 summary (transposition)",
+        "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/130-2026-1139897687"
       }
     ],
     "tags": [
@@ -147,7 +155,8 @@
     ],
     "checked_at": "2026-10-12",
     "source_published_at": null,
-    "source_updated_at": null
+    "source_updated_at": null,
+    "date_type": "Adopted"
   },
   {
     "id": "eu-cec-definition",
@@ -158,7 +167,7 @@
     "date": "2019-06-05",
     "summary": "Directive (EU) 2019/944 provides the citizen-energy-community definition and framework.",
     "evidence": "Article 2(11) defines CECs; article 16 sets their framework. CEC and REC definitions have different scopes.",
-    "unknowns": "Review amendments and national implementation. An EU definition does not itself confirm project eligibility.",
+    "unknowns": "Amended by Directive (EU) 2024/1711, which DL 130/2026 states it transposes. Review the consolidated directive and national implementation. An EU definition does not itself confirm project eligibility.",
     "sources": [
       {
         "label": "EUR-Lex: Directive (EU) 2019/944",
@@ -167,6 +176,10 @@
       {
         "label": "Commission: community definitions",
         "url": "https://citizens-energy.ec.europa.eu/knowledge-hub/map-citizen-energy-projects_en"
+      },
+      {
+        "label": "Diário da República: DL 130/2026 summary (transposition)",
+        "url": "https://diariodarepublica.pt/dr/detalhe/decreto-lei/130-2026-1139897687"
       }
     ],
     "tags": [
@@ -176,6 +189,7 @@
     ],
     "checked_at": "2026-10-12",
     "source_published_at": null,
-    "source_updated_at": null
+    "source_updated_at": null,
+    "date_type": "Adopted"
   }
 ]

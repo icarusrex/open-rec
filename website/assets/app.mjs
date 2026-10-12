@@ -1,6 +1,17 @@
 import {filterRecords, readProgress, writeProgress} from './core.mjs';
 
 document.documentElement.classList.add('js');
+
+// Printouts should carry sources: open closed disclosures for printing, then restore them.
+let openedForPrint = [];
+window.addEventListener('beforeprint', () => {
+  openedForPrint = [...document.querySelectorAll('details:not([open])')];
+  for (const d of openedForPrint) d.open = true;
+});
+window.addEventListener('afterprint', () => {
+  for (const d of openedForPrint) d.open = false;
+  openedForPrint = [];
+});
 const menu = document.querySelector('.menu-button');
 const nav = document.querySelector('#navigation');
 menu.hidden = false;
